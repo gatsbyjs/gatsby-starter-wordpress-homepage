@@ -52,6 +52,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
       gatsbyImageData: JSON @proxyImage
       image: HomepageImage @recursiveImage
       localFile: File
+      url: String
     }
 
     interface HomepageFeature implements Node & HomepageBlock {
@@ -220,6 +221,8 @@ exports.createSchemaCustomization = async ({ actions }) => {
       gatsbyImageData: JSON @proxyImage
       image: HomepageImage @recursiveImage
       localFile: File
+      url: String @proxy(from: "mediaItemUrl")
+      mediaItemUrl: String
     }
 
     type WpBenefit implements Node & HomepageBenefit {
@@ -339,6 +342,7 @@ exports.onCreateNode = ({
         featureList,
         benefitList,
       } = node
+      
 
       const heroID = createNodeId(`${node.id} >>> HomepageHero`)
       const ctaID = createNodeId(`${node.id} >>> HomepageCta`)
@@ -526,6 +530,7 @@ exports.onCreateNode = ({
         },
         parent: node.id,
         blocktype: 'Homepage',
+        image: node.featuredImageId,
         content: [
           heroID,
           logosID,
