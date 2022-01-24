@@ -1,0 +1,6 @@
+.env*
+!.env.EXAMPLE
+node_modules
+.cache
+public
+dist

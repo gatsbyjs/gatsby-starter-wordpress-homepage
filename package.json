@@ -1,0 +1,31 @@
+{
+  "name": "gatsby-starter-wordpress-homepage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "gatsby-plugin-react-helmet": "^5.5.0",
+    "gatsby-source-wordpress": "^6.5.1",
+    "react-helmet": "^6.1.0",
+    "@fontsource/dm-sans": "^4.5.0",
+    "@fontsource/dm-serif-text": "^4.5.0",
+    "gatsby": "^4.4.0",
+    "gatsby-plugin-image": "^2.4.0",
+    "gatsby-plugin-sharp": "^4.4.0",
+    "gatsby-plugin-vanilla-extract": "^1.0.6",
+    "gatsby-source-filesystem": "^4.4.0",
+    "gatsby-transformer-sharp": "^4.4.0",
+    "is-absolute-url": "^4.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "sharp": "^0.29.3"
+  },
+  "private": true,
+  "scripts": {
+    "start": "gatsby develop",
+    "develop": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  }
+}
