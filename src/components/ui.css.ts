@@ -7,7 +7,6 @@ const mqAliases = ["small", "medium", "large"]
 const media = breakpoints
   .map((n) => `screen and (min-width: ${n})`)
   .reduce((a, b, i) => {
-    a[i] = b
     a[mqAliases[i]] = b
     return a
   }, {})
@@ -253,10 +252,10 @@ export const buttons = styleVariants({
       color: theme.colors.background,
       backgroundColor: theme.colors.primary,
       ":hover": {
-        backgroundColor: theme.colors.black,
+        backgroundColor: theme.colors.active,
       },
       ":focus": {
-        backgroundColor: theme.colors.black,
+        backgroundColor: theme.colors.active,
       },
     },
   ],
@@ -267,11 +266,11 @@ export const buttons = styleVariants({
       backgroundColor: theme.colors.background,
       ":hover": {
         color: theme.colors.background,
-        backgroundColor: theme.colors.black,
+        backgroundColor: theme.colors.active,
       },
       ":focus": {
         color: theme.colors.background,
-        backgroundColor: theme.colors.black,
+        backgroundColor: theme.colors.active,
       },
     },
   ],
@@ -354,6 +353,17 @@ export const icons = styleVariants(
     marginBottom: theme.space[2],
   })
 )
+
+export const iconLink = style({
+  color: theme.colors.text,
+  marginRight: theme.space[3],
+  ":hover": {
+    color: theme.colors.active,
+  },
+  ":focus": {
+    color: theme.colors.active,
+  },
+})
 
 export const interactiveIcon = style({
   display: "flex",

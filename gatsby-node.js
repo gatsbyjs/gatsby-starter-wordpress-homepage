@@ -4,32 +4,32 @@ exports.createSchemaCustomization = async ({ actions }) => {
     extend(options) {
       return {
         resolve(source) {
-          return source.internal.type.replace('Wp', 'Homepage')
-        }
+          return source.internal.type.replace("Wp", "Homepage")
+        },
       }
-    }
+    },
   })
 
   actions.createFieldExtension({
-    name: 'recursiveImage',
+    name: "recursiveImage",
     extend(options) {
       return {
         async resolve(source, args, context, info) {
           return source
-        }
+        },
       }
-    }
+    },
   })
 
   actions.createFieldExtension({
-    name: 'proxyImage',
+    name: "proxyImage",
     extend(options) {
       return {
         async resolve(source, args, context, info) {
-          const imageType = info.schema.getType('ImageSharp')
+          const imageType = info.schema.getType("ImageSharp")
           const file = context.nodeModel.getNodeById(source.localFile)
           const image = context.nodeModel.getNodeById({
-            id: file.children[0]
+            id: file.children[0],
           })
           const resolver = imageType.getFields().gatsbyImageData.resolve
           if (!resolver) return null
@@ -291,19 +291,15 @@ exports.createSchemaCustomization = async ({ actions }) => {
   `)
 }
 
-exports.sourceNodes = ({
-  actions,
-  createNodeId,
-  createContentDigest,
-}) => {
+exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   actions.createNode({
-    id: createNodeId('HomepageLayout'),
+    id: createNodeId("HomepageLayout"),
     internal: {
-      type: 'Layout',
-      contentDigest: createContentDigest('Layout'),
+      type: "Layout",
+      contentDigest: createContentDigest("Layout"),
     },
-    header: 'header',
-    footer: 'footer',
+    header: "header",
+    footer: "footer",
   })
 }
 
@@ -313,25 +309,27 @@ exports.onCreateNode = ({
   createNodeId,
   createContentDigest,
 }) => {
-  if (!node.internal.type.includes('Wp')) return
+  if (!node.internal.type.includes("Wp")) return
 
-  const createLinkNode = parentId => ({ title, url }, i) => {
-    const linkID = createNodeId(`${parentId} >>> HomepageLink ${i}`)
-    actions.createNode({
-      id: linkID,
-      internal: {
-        type: 'HomepageLink',
-        contentDigest: createContentDigest(JSON.stringify({ title, url })),
-      },
-      href: url,
-      text: title,
-    })
-    return linkID
-  }
+  const createLinkNode =
+    (parentId) =>
+    ({ title, url }, i) => {
+      const linkID = createNodeId(`${parentId} >>> HomepageLink ${i}`)
+      actions.createNode({
+        id: linkID,
+        internal: {
+          type: "HomepageLink",
+          contentDigest: createContentDigest(JSON.stringify({ title, url })),
+        },
+        href: url,
+        text: title,
+      })
+      return linkID
+    }
 
   switch (node.internal.type) {
-    case 'WpPage':
-      if (node.slug !== 'homepage') return
+    case "WpPage":
+      if (node.slug !== "homepage") return
       const {
         homepageHero,
         homepageCta,
@@ -342,12 +340,13 @@ exports.onCreateNode = ({
         featureList,
         benefitList,
       } = node
-      
 
       const heroID = createNodeId(`${node.id} >>> HomepageHero`)
       const ctaID = createNodeId(`${node.id} >>> HomepageCta`)
       const statsID = createNodeId(`${node.id} >>> HomepageStatList`)
-      const testimonialsID = createNodeId(`${node.id} >>> HomepageTestimonialList`)
+      const testimonialsID = createNodeId(
+        `${node.id} >>> HomepageTestimonialList`
+      )
       const productsID = createNodeId(`${node.id} >>> HomepageProductList`)
       const logosID = createNodeId(`${node.id} >>> HomepageLogoList`)
       const featuresID = createNodeId(`${node.id} >>> HomepageFeatureList`)
@@ -356,36 +355,31 @@ exports.onCreateNode = ({
       actions.createNode({
         id: heroID,
         internal: {
-          type: 'HomepageHero',
+          type: "HomepageHero",
           contentDigest: createContentDigest(JSON.stringify(homepageHero)),
         },
         parent: node.id,
-        blocktype: 'HomepageHero',
+        blocktype: "HomepageHero",
         image: homepageHero.heroImage.id,
         kicker: homepageHero.heroKicker,
         heading: homepageHero.heroHeading,
         text: homepageHero.heroText,
-        links: [
-          homepageHero.heroLink,
-          homepageHero.heroSecondaryLink,
-        ].filter(Boolean)
+        links: [homepageHero.heroLink, homepageHero.heroSecondaryLink]
+          .filter(Boolean)
           .map(createLinkNode(heroID)),
       })
 
       actions.createNode({
         id: ctaID,
         internal: {
-          type: 'HomepageCta',
+          type: "HomepageCta",
           contentDigest: createContentDigest(JSON.stringify(homepageCta)),
         },
         parent: node.id,
-        blocktype: 'HomepageCta',
+        blocktype: "HomepageCta",
         heading: homepageCta.ctaHeading,
         text: homepageCta.ctaText,
-        links: [
-          homepageCta.ctaLink,
-          homepageCta.ctaSecondaryLink,
-        ]
+        links: [homepageCta.ctaLink, homepageCta.ctaSecondaryLink]
           .filter(Boolean)
           .map(createLinkNode(ctaID)),
         image: homepageCta.ctaImage.id,
@@ -394,11 +388,11 @@ exports.onCreateNode = ({
       actions.createNode({
         id: statsID,
         internal: {
-          type: 'HomepageStatList',
+          type: "HomepageStatList",
           contentDigest: createContentDigest(JSON.stringify(statList)),
         },
         parent: node.id,
-        blocktype: 'HomepageStatList',
+        blocktype: "HomepageStatList",
         kicker: statList.statsKicker,
         heading: statList.statsHeading,
         text: statList.statsText,
@@ -420,28 +414,28 @@ exports.onCreateNode = ({
             value: statList.stat3,
             label: statList.stat3label,
           },
-        ].map(stat => {
+        ].map((stat) => {
           const id = createNodeId(`${statsID} >>> HomepageStat`)
           actions.createNode({
             ...stat,
             id,
             internal: {
-              type: 'HomepageStat',
+              type: "HomepageStat",
               contentDigest: createContentDigest(stat),
             },
           })
           return id
-        })
+        }),
       })
 
       actions.createNode({
         id: testimonialsID,
         internal: {
-          type: 'HomepageTestimonialList',
+          type: "HomepageTestimonialList",
           contentDigest: createContentDigest(JSON.stringify(testimonialList)),
         },
         parent: node.id,
-        blocktype: 'HomepageTestimonialList',
+        blocktype: "HomepageTestimonialList",
         kicker: testimonialList.testimonialsKicker,
         heading: testimonialList.testimonialsHeading,
         content: [
@@ -455,28 +449,28 @@ exports.onCreateNode = ({
       actions.createNode({
         id: productsID,
         internal: {
-          type: 'HomepageProductList',
+          type: "HomepageProductList",
           contentDigest: createContentDigest(JSON.stringify(productList)),
         },
         parent: node.id,
-        blocktype: 'HomepageProductList',
+        blocktype: "HomepageProductList",
         kicker: productList.productsKicker,
         heading: productList.productsHeading,
         content: [
           productList.product1,
           productList.product2,
           productList.product3,
-        ].map(product => product.id),
+        ].map((product) => product.id),
       })
 
       actions.createNode({
         id: logosID,
         internal: {
-          type: 'HomepageLogoList',
+          type: "HomepageLogoList",
           contentDigest: createContentDigest(JSON.stringify(logoList)),
         },
         parent: node.id,
-        blocktype: 'HomepageLogoList',
+        blocktype: "HomepageLogoList",
         text: logoList.logosText,
         logos: [
           logoList.logo1,
@@ -484,34 +478,31 @@ exports.onCreateNode = ({
           logoList.logo3,
           logoList.logo4,
           logoList.logo5,
-        ].map(logo => logo.id),
+        ].map((logo) => logo.id),
       })
 
       actions.createNode({
         id: featuresID,
         internal: {
-          type: 'HomepageFeatureList',
+          type: "HomepageFeatureList",
           contentDigest: createContentDigest(JSON.stringify(featureList)),
         },
         parent: node.id,
-        blocktype: 'HomepageFeatureList',
+        blocktype: "HomepageFeatureList",
         kicker: featureList.featuresKicker,
         heading: featureList.featuresHeading,
         text: featureList.featuresText,
-        content: [
-          featureList.feature1.id,
-          featureList.feature2.id,
-        ]
+        content: [featureList.feature1.id, featureList.feature2.id],
       })
 
       actions.createNode({
         id: benefitsID,
         internal: {
-          type: 'HomepageBenefitList',
+          type: "HomepageBenefitList",
           contentDigest: createContentDigest(JSON.stringify(benefitList)),
         },
         parent: node.id,
-        blocktype: 'HomepageBenefitList',
+        blocktype: "HomepageBenefitList",
         heading: benefitList.benefitsHeading,
         text: benefitList.benefitsText,
         content: [
@@ -525,11 +516,11 @@ exports.onCreateNode = ({
         ...node,
         id: createNodeId(`${node.id} >>> Homepage`),
         internal: {
-          type: 'Homepage',
+          type: "Homepage",
           contentDigest: node.internal.contentDigest,
         },
         parent: node.id,
-        blocktype: 'Homepage',
+        blocktype: "Homepage",
         image: node.featuredImageId,
         content: [
           heroID,
@@ -544,27 +535,27 @@ exports.onCreateNode = ({
       })
 
       break
-    case 'WpFeature':
+    case "WpFeature":
       if (node.feature.link) {
         const linkID = createLinkNode(node.id)(node.feature.link, 0)
         actions.createNodeField({
           node,
-          name: 'links',
-          value: [ linkID ],
+          name: "links",
+          value: [linkID],
         })
       }
       break
-    case 'WpProduct':
+    case "WpProduct":
       if (node.product.link) {
         const linkID = createLinkNode(node.id)(node.product.link, 0)
         actions.createNodeField({
           node,
-          name: 'links',
-          value: [ linkID ],
+          name: "links",
+          value: [linkID],
         })
       }
       break
-    case 'WpHeader':
+    case "WpHeader":
       const { header } = node
       const headerLinks = [
         header.link1,
@@ -576,16 +567,16 @@ exports.onCreateNode = ({
       const headerCta = createLinkNode(node.id)(header.cta, 9999)
       actions.createNodeField({
         node,
-        name: 'links',
+        name: "links",
         value: headerLinks,
       })
       actions.createNodeField({
         node,
-        name: 'cta',
+        name: "cta",
         value: headerCta,
       })
       break
-    case 'WpFooter':
+    case "WpFooter":
       const { footer } = node
       const footerLinks = [
         footer.link1,
@@ -596,15 +587,19 @@ exports.onCreateNode = ({
       ].map(createLinkNode(node.id))
       // TODO currently hard-coded to only these social networks
       const socialLinks = [
-        { username: footer.twitter, service: 'TWITTER' },
-        { username: footer.github, service: 'GITHUB' },
+        { username: footer.twitter, service: "TWITTER" },
+        { username: footer.twitch, service: "TWITCH" },
+        { username: footer.instagram, service: "INSTAGRAM" },
+        { username: footer.github, service: "GITHUB" },
+        { username: footer.youtube, service: "YOUTUBE" },
+        { username: footer.facebook, service: "FACEBOOK" },
       ].map((link, i) => {
         const id = createNodeId(`${node.id} >>> SocialLink ${i}`)
         actions.createNode({
           ...link,
           id,
           internal: {
-            type: 'SocialLink',
+            type: "SocialLink",
             contentDigest: createContentDigest(JSON.stringify(link)),
           },
         })
@@ -612,18 +607,18 @@ exports.onCreateNode = ({
       })
       actions.createNodeField({
         node,
-        name: 'links',
+        name: "links",
         value: footerLinks,
       })
       actions.createNodeField({
         node,
-        name: 'socialLinks',
+        name: "socialLinks",
         value: socialLinks,
       })
       // TODO
       actions.createNodeField({
         node,
-        name: 'meta',
+        name: "meta",
         value: [],
       })
       break

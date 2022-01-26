@@ -1,16 +1,5 @@
 import { createGlobalTheme } from "@vanilla-extract/css"
-
-const colors = {
-  background: "#fff",
-  primary: "#004ca3",
-  muted: "#f5fcff",
-  black: "#000",
-
-  // ask flo
-  muteda: "rgba(0, 76, 163, 0.1)",
-}
-
-colors.text = colors.primary
+import { colors } from "./colors.css.ts"
 
 const space = {
   0: 0,

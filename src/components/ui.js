@@ -200,6 +200,10 @@ export function Icon({ alt, image, size = "medium" }) {
   )
 }
 
+export function IconLink(props) {
+  return <NavLink cx={[styles.iconLink]} {...props} />
+}
+
 export function InteractiveIcon(props) {
   return <Base as="button" cx={[styles.interactiveIcon]} {...props} />
 }

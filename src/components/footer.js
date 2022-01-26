@@ -1,49 +1,55 @@
 import * as React from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import {
+  Twitter,
+  Twitch,
+  Instagram,
+  Facebook,
+  Youtube,
+  GitHub,
+} from "react-feather"
+import {
   Container,
   Flex,
   FlexList,
   Box,
   Space,
   NavLink,
-  Logo,
   Text,
+  IconLink,
 } from "./ui"
+import BrandLogo from "./brand-logo"
 
 const socialMedia = {
   TWITTER: {
     url: "https://twitter.com",
     name: "Twitter",
+    icon: <Twitter />,
   },
   INSTAGRAM: {
     url: "https://instagram.com",
     name: "Instagram",
+    icon: <Instagram />,
   },
   FACEBOOK: {
     url: "https://facebook.com",
     name: "Facebook",
+    icon: <Facebook />,
   },
   YOUTUBE: {
     url: "https://youtube.com",
     name: "YouTube",
-  },
-  LINKEDIN: {
-    url: "https://linkedin.com",
-    name: "LinkedIn",
+    icon: <Youtube />,
   },
   GITHUB: {
     url: "https://github.com",
     name: "GitHub",
-  },
-  // TODO: determine correct URLs for Discord
-  DISCORD: {
-    url: "https://discord.com",
-    name: "Discord",
+    icon: <GitHub />,
   },
   TWITCH: {
     url: "https://twitch.tv",
     name: "Twitch",
+    icon: <Twitch />,
   },
 }
 
@@ -53,8 +59,8 @@ const getSocialURL = ({ service, username }) => {
   return `${domain}/${username}`
 }
 
-const getSocialName = ({ service }) => {
-  return socialMedia[service]?.name
+const getSocialIcon = ({ service }) => {
+  return socialMedia[service]?.icon
 }
 
 export default function Footer(props) {
@@ -88,22 +94,14 @@ export default function Footer(props) {
     }
   `)
 
-  const { logo, links, meta, socialLinks, copyright } = data.layout.footer
+  const { links, meta, socialLinks, copyright } = data.layout.footer
 
   return (
     <Box as="footer" paddingY={4}>
       <Container>
-        <Flex>
-          {logo && <Logo image={logo} />}
+        <Flex variant="start" responsive>
+          <BrandLogo />
           <Space />
-          <FlexList>
-            {meta &&
-              meta.map((link) => (
-                <li key={link.id}>
-                  <NavLink to={link.href}>{link.text}</NavLink>
-                </li>
-              ))}
-          </FlexList>
           <FlexList>
             {socialLinks &&
               socialLinks.map((link) => {
@@ -111,9 +109,7 @@ export default function Footer(props) {
                 return (
                   url && (
                     <li key={link.id}>
-                      <NavLink to={getSocialURL(link)}>
-                        {getSocialName(link)}
-                      </NavLink>
+                      <IconLink to={url}>{getSocialIcon(link)}</IconLink>
                     </li>
                   )
                 )
@@ -121,8 +117,8 @@ export default function Footer(props) {
           </FlexList>
         </Flex>
         <Space size={5} />
-        <Flex>
-          <FlexList>
+        <Flex variant="start" responsive>
+          <FlexList variant="start" responsive>
             {links &&
               links.map((link) => (
                 <li key={link.id}>
@@ -131,6 +127,16 @@ export default function Footer(props) {
               ))}
           </FlexList>
           <Space />
+          <FlexList>
+            {meta &&
+              meta.map((link) => (
+                <li key={link.id}>
+                  <NavLink to={link.href}>
+                    <Text variant="small">{link.text}</Text>
+                  </NavLink>
+                </li>
+              ))}
+          </FlexList>
           <Text variant="small">{copyright}</Text>
         </Flex>
       </Container>
