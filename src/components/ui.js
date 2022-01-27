@@ -118,10 +118,10 @@ export function Link({ to, href, ...props }) {
   if (isAbsoluteURL(url)) {
     return (
       // eslint-disable-next-line jsx-a11y/anchor-has-content
-      <a href={url} {...props} />
+      <a href={url} className={styles.link} {...props} />
     )
   }
-  return <GatsbyLink to={url} {...props} />
+  return <GatsbyLink to={url} className={styles.link} {...props} />
 }
 
 export function NavLink({ ...props }) {

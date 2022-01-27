@@ -208,6 +208,20 @@ export const text = styleVariants({
       marginBottom: theme.space[2],
     },
   ],
+  mega: [
+    margin0,
+    {
+      fontSize: "180px",
+      fontFamily: theme.fonts.mono,
+      lineHeight: theme.lineHeights.tight,
+      letterSpacing: theme.letterSpacings.tight,
+      "@media": {
+        [media.medium]: {
+          fontSize: "360px",
+        },
+      },
+    },
+  ],
   center: {
     textAlign: "center",
   },
@@ -216,11 +230,18 @@ export const text = styleVariants({
   },
 })
 
+export const link = style({
+  color: "inherit",
+  ":hover": {
+    color: theme.colors.active,
+  },
+})
+
 export const navlink = style({
   color: "inherit",
   textDecoration: "none",
   ":hover": {
-    color: theme.colors.black,
+    color: theme.colors.active,
   },
 })
 
@@ -228,7 +249,7 @@ export const ctaLink = style({
   color: "inherit",
   fontWeight: theme.fontWeights.bold,
   ":hover": {
-    color: theme.colors.black,
+    color: theme.colors.active,
   },
 })
 

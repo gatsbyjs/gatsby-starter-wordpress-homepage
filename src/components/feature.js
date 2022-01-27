@@ -12,7 +12,6 @@ import {
   ButtonList,
 } from "./ui"
 
-// TODO add prop for reversed order
 export default function Feature(props) {
   return (
     <Section background="muted">

@@ -69,10 +69,6 @@ export default function Footer(props) {
       layout {
         footer {
           id
-          logo {
-            id
-            gatsbyImageData
-          }
           links {
             id
             href

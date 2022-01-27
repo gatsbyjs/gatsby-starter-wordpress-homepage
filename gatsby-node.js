@@ -90,7 +90,6 @@ exports.createSchemaCustomization = async ({ actions }) => {
     interface LayoutHeader implements Node {
       id: ID!
       contentTypeName: String!
-      logo: HomepageImage
       links: [HomepageLink]
       cta: HomepageLink
     }
@@ -109,7 +108,6 @@ exports.createSchemaCustomization = async ({ actions }) => {
     interface LayoutFooter implements Node {
       id: ID!
       contentTypeName: String!
-      logo: HomepageImage
       links: [HomepageLink]
       meta: [HomepageLink]
       socialLinks: [SocialLink]
@@ -262,7 +260,6 @@ exports.createSchemaCustomization = async ({ actions }) => {
     type WpHeader implements Node & LayoutHeader {
       id: ID!
       contentTypeName: String!
-      logo: HomepageImage @link @proxy(from: "header.logo.id")
       links: [HomepageLink] @link @proxy(from: "fields.links")
       cta: HomepageLink @link @proxy(from: "fields.cta")
     }
@@ -276,7 +273,6 @@ exports.createSchemaCustomization = async ({ actions }) => {
     type WpFooter implements Node & LayoutFooter {
       id: ID!
       contentTypeName: String!
-      logo: HomepageImage @link @proxy(from: "footer.logo.id")
       links: [HomepageLink] @link @proxy(from: "fields.links")
       meta: [HomepageLink] @link @proxy(from: "fields.meta")
       socialLinks: [SocialLink] @link @proxy(from: "fields.socialLinks")

@@ -2,11 +2,11 @@
   "name": "gatsby-starter-wordpress-homepage",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
   "dependencies": {
     "gatsby-plugin-react-helmet": "^5.5.0",
     "gatsby-source-wordpress": "^6.5.1",
     "react-helmet": "^6.1.0",
+    "@fontsource/dm-mono": "^4.5.2",
     "@fontsource/dm-sans": "^4.5.0",
     "@fontsource/dm-serif-text": "^4.5.0",
     "gatsby": "^4.4.0",
