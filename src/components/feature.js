@@ -14,24 +14,24 @@ import {
 
 export default function Feature(props) {
   return (
-    <Section background="muted">
+    <Section paddingY={4} background="muted">
       <Container>
         <Flex gap={4} variant="responsive">
           <Box width="half" order={props.flip ? 1 : null}>
-            <Heading>
-              {props.kicker && <Kicker>{props.kicker}</Kicker>}
-              {props.heading}
-            </Heading>
-            <Text variant="lead">{props.text}</Text>
-            <ButtonList links={props.links} />
-          </Box>
-          <Box width="half">
             {props.image && (
               <GatsbyImage
                 alt={props.image.alt}
                 image={getImage(props.image)}
               />
             )}
+          </Box>
+          <Box width="half">
+            <Heading>
+              {props.kicker && <Kicker>{props.kicker}</Kicker>}
+              {props.heading}
+            </Heading>
+            <Text variant="lead">{props.text}</Text>
+            <ButtonList links={props.links} />
           </Box>
         </Flex>
       </Container>

@@ -12,6 +12,7 @@ import {
   Box,
   Icon,
   ButtonList,
+  Nudge,
 } from "./ui"
 
 function Stat(props) {
@@ -25,9 +26,9 @@ function Stat(props) {
 
 export default function StatList(props) {
   return (
-    <Container>
+    <Container width="fullbleed">
       <Section padding={5} radius="large" background="primary">
-        <Flex responsive>
+        <Flex responsive variant="end">
           <Box width="half">
             {props.icon && <Icon alt={props.icon.alt} image={props.icon} />}
             <Heading>
@@ -35,7 +36,7 @@ export default function StatList(props) {
               {props.heading}
             </Heading>
             {props.text && <Text variant="lead">{props.text}</Text>}
-            <FlexList gap={5}>
+            <FlexList wrap gap={4}>
               {props.content.map((stat) => (
                 <li key={stat.id}>
                   <Stat {...stat} />
@@ -46,10 +47,12 @@ export default function StatList(props) {
           </Box>
           <Box width="half">
             {props.image && (
-              <GatsbyImage
-                alt={props.image.alt}
-                image={getImage(props.image)}
-              />
+              <Nudge right={5} bottom={5}>
+                <GatsbyImage
+                  alt={props.image.alt}
+                  image={getImage(props.image)}
+                />
+              </Nudge>
             )}
           </Box>
         </Flex>

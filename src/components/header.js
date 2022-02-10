@@ -9,10 +9,10 @@ import {
   NavLink,
   Button,
   InteractiveIcon,
+  Nudge,
 } from "./ui"
 import {
   mobileNavOverlay,
-  mobileNavLinkList,
   mobileNavLink,
   desktopHeaderNavWrapper,
   mobileHeaderNavWrapper,
@@ -59,7 +59,9 @@ export default function Header() {
         {/* Desktop / Tablet - Header / Nav */}
         <Space size={2} />
         <Flex>
-          <BrandLogo />
+          <NavLink to="/">
+            <BrandLogo />
+          </NavLink>
           <nav>
             <FlexList>
               {links &&
@@ -94,30 +96,30 @@ export default function Header() {
                 </Button>
               )}
             </div>
-            <InteractiveIcon
-              title="Toggle menu"
-              onClick={() => setOpen(!isOpen)}
-              className={
-                mobileNavSVGColorWrapper[isOpen ? "reversed" : "primary"]
-              }
-            >
-              {isOpen ? <X /> : <Menu />}
-            </InteractiveIcon>
+            <Nudge right={3}>
+              <InteractiveIcon
+                title="Toggle menu"
+                onClick={() => setOpen(!isOpen)}
+                className={
+                  mobileNavSVGColorWrapper[isOpen ? "reversed" : "primary"]
+                }
+              >
+                {isOpen ? <X /> : <Menu />}
+              </InteractiveIcon>
+            </Nudge>
           </Flex>
         </Flex>
       </Container>
       {isOpen && (
         <div className={mobileNavOverlay}>
           <nav>
-            <FlexList
-              variant="responsive"
-              gap="4"
-              className={mobileNavLinkList}
-            >
+            <FlexList responsive variant="stretch">
               {links &&
                 links.map((link) => (
-                  <li key={link.id} className={mobileNavLink}>
-                    <NavLink to={link.href}>{link.text}</NavLink>
+                  <li key={link.id}>
+                    <NavLink to={link.href} className={mobileNavLink}>
+                      {link.text}
+                    </NavLink>
                   </li>
                 ))}
             </FlexList>

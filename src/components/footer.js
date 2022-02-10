@@ -96,7 +96,9 @@ export default function Footer(props) {
     <Box as="footer" paddingY={4}>
       <Container>
         <Flex variant="start" responsive>
-          <BrandLogo />
+          <NavLink to="/">
+            <BrandLogo />
+          </NavLink>
           <Space />
           <FlexList>
             {socialLinks &&

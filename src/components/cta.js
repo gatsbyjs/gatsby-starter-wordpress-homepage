@@ -1,19 +1,32 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
-import { Container, Section, Heading, Text, ButtonList } from "./ui"
+import {
+  Nudge,
+  Container,
+  Section,
+  Heading,
+  Text,
+  ButtonList,
+  Kicker,
+} from "./ui"
 
 export default function HomepageCta(props) {
   return (
-    <Container>
+    <Container width="fullbleed">
       <Section padding={5} radius="large" background="primary">
-        <Heading center>{props.heading}</Heading>
+        <Heading center>
+          {props.kicker && <Kicker center>{props.kicker}</Kicker>}
+          {props.heading}
+        </Heading>
         <Text as="p" center variant="lead">
           {props.text}
         </Text>
         <ButtonList links={props.links} variant="center" reversed />
         {props.image && (
-          <GatsbyImage alt={props.image.alt} image={getImage(props.image)} />
+          <Nudge left={5} right={5} bottom={5}>
+            <GatsbyImage alt={props.image.alt} image={getImage(props.image)} />
+          </Nudge>
         )}
       </Section>
     </Container>
@@ -23,6 +36,7 @@ export default function HomepageCta(props) {
 export const query = graphql`
   fragment HomepageCtaContent on HomepageCta {
     id
+    kicker
     heading
     text
     image {

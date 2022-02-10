@@ -25,6 +25,8 @@ export function Flex({
   gutter,
   wrap,
   responsive,
+  marginY,
+  alignItems,
   cx: _cx,
   ...props
 }) {
@@ -37,6 +39,8 @@ export function Flex({
         wrap && styles.flexVariants.wrap,
         gutter && styles.gutter[gutter],
         gutter ? styles.flexGap[0] : styles.flexGap[gap],
+        marginY && styles.marginY[marginY],
+        alignItems && styles.flexVariants[alignItems],
         _cx,
       ]}
       {...props}
@@ -73,19 +77,33 @@ export function Box({
 }
 
 export function FlexList({ ...props }) {
-  return <Flex as="ul" cx={[styles.list]} {...props} />
+  return <Flex as="ul" cx={styles.list} {...props} />
 }
 
 export function List(props) {
   return <Base as="ul" cx={[styles.list]} {...props} />
 }
 
-export function Space({ className, size = "auto", ...props }) {
-  return <Base className={cx(styles.margin[size], className)} {...props} />
+export function Space({ size = "auto", ...props }) {
+  return <Base cx={[styles.margin[size]]} {...props} />
+}
+
+export function Nudge({ left, right, top, bottom, ...props }) {
+  return (
+    <Base
+      cx={[
+        styles.margin.left[-left],
+        styles.margin.right[-right],
+        styles.margin.top[-top],
+        styles.margin.bottom[-bottom],
+      ]}
+      {...props}
+    />
+  )
 }
 
 export function Section(props) {
-  return <Box as="section" cx={styles.section} {...props} />
+  return <Box as="section" paddingY={5} {...props} />
 }
 
 export function Text({ variant = "body", center, bold, ...props }) {
@@ -99,6 +117,10 @@ export function Text({ variant = "body", center, bold, ...props }) {
       {...props}
     />
   )
+}
+
+export function SuperHeading({ ...props }) {
+  return <Text as="h1" variant="superHeading" {...props} />
 }
 
 export function Heading({ ...props }) {
@@ -140,7 +162,7 @@ export function ButtonList({ links = [], reversed = false, ...props }) {
     return i === 0 ? "primary" : "link"
   }
   return (
-    <FlexList {...props}>
+    <FlexList marginY={4} {...props}>
       {links &&
         links.map((link, i) => (
           <li key={link.id}>

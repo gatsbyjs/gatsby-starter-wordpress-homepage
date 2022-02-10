@@ -40,7 +40,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
   })
 
   // abstract interfaces
-  actions.createTypes(`
+  actions.createTypes(/* GraphQL */ `
     interface HomepageBlock implements Node {
       id: ID!
       blocktype: String
@@ -113,10 +113,19 @@ exports.createSchemaCustomization = async ({ actions }) => {
       socialLinks: [SocialLink]
       copyright: String
     }
+
+    interface Page implements Node {
+      id: ID!
+      slug: String!
+      title: String
+      description: String
+      image: HomepageImage
+      html: String
+    }
   `)
 
   // creating custom types because WP does not provide these
-  actions.createTypes(`
+  actions.createTypes(/* GraphQL */ `
     type HomepageLink implements Node {
       id: ID!
       href: String
@@ -126,7 +135,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
     type HomepageHero implements Node & HomepageBlock {
       id: ID!
       blocktype: String
-      heading: String
+      heading: String!
       kicker: String
       subhead: String
       image: HomepageImage @link
@@ -212,7 +221,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
     }
   `)
 
-  actions.createTypes(`
+  actions.createTypes(/* GraphQL */ `
     type WpMediaItem implements Node & HomepageImage {
       id: ID!
       alt: String @proxy(from: "altText")
@@ -253,10 +262,20 @@ exports.createSchemaCustomization = async ({ actions }) => {
       source: String @proxy(from: "testimonial.source")
       avatar: HomepageImage @link @proxy(from: "testimonial.avatar.id")
     }
+
+    type WpPage implements Node & Page {
+      id: ID!
+      slug: String!
+      title: String
+      description: String
+      image: HomepageImage @link @proxy(from: "featuredImageId")
+      content: String
+      html: String @proxy(from: "content")
+    }
   `)
 
   // Layout types
-  actions.createTypes(`
+  actions.createTypes(/* GraphQL */ `
     type WpHeader implements Node & LayoutHeader {
       id: ID!
       contentTypeName: String!
@@ -601,6 +620,9 @@ exports.onCreateNode = ({
         })
         return id
       })
+      const metaLinks = [footer.termsLink, footer.privacyPolicyLink].map(
+        createLinkNode(node.id)
+      )
       actions.createNodeField({
         node,
         name: "links",
@@ -611,11 +633,10 @@ exports.onCreateNode = ({
         name: "socialLinks",
         value: socialLinks,
       })
-      // TODO
       actions.createNodeField({
         node,
         name: "meta",
-        value: [],
+        value: metaLinks,
       })
       break
   }

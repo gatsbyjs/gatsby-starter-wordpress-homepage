@@ -29,7 +29,7 @@ export default function Hero(props) {
           <Box width="half">
             <Heading as="h1">
               {props.kicker && <Kicker>{props.kicker}</Kicker>}
-              {props.heading}
+              {props.h1}
             </Heading>
             <Subhead as="h2">{props.subhead}</Subhead>
             <Text as="p">{props.text}</Text>
@@ -45,7 +45,7 @@ export const query = graphql`
   fragment HomepageHeroContent on HomepageHero {
     id
     kicker
-    heading
+    h1: heading
     subhead
     text
     links {

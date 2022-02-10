@@ -2,7 +2,7 @@ import { createGlobalTheme } from "@vanilla-extract/css"
 import { colors } from "./colors.css.ts"
 
 const space = {
-  0: 0,
+  0: "0",
   1: "4px",
   2: "8px",
   3: "16px",
@@ -10,6 +10,18 @@ const space = {
   5: "64px",
   6: "128px",
 }
+
+// add negative margins
+Object.assign(
+  space,
+  Object.entries(space).reduce(
+    (a, [key, val]) => ({
+      ...a,
+      [-1 * key]: `-${val}`,
+    }),
+    {}
+  )
+)
 
 const fontSizes = {
   0: "12px",
@@ -19,14 +31,15 @@ const fontSizes = {
   4: "24px",
   5: "32px",
   6: "48px",
+  7: "64px",
 }
 
 const fontWeights = {
-  normal: 400,
-  medium: 500,
-  semibold: 600,
-  bold: 700,
-  extrabold: 800,
+  normal: "400",
+  medium: "500",
+  semibold: "600",
+  bold: "700",
+  extrabold: "800",
 }
 
 const fonts = {
@@ -37,13 +50,13 @@ const fonts = {
 }
 
 const lineHeights = {
-  text: 1.65,
-  heading: 1.25,
-  tight: 1.1,
+  text: "1.65",
+  heading: "1.25",
+  tight: "1.1",
 }
 
 const letterSpacings = {
-  normal: 0,
+  normal: "0",
   tight: "-0.02em",
   wide: "0.08em",
 }
@@ -52,6 +65,7 @@ const sizes = {
   container: "1280px",
   narrow: "1024px",
   wide: "1280px",
+  tight: "848px",
   avatar: "48px",
 }
 
