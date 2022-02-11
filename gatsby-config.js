@@ -1,3 +1,5 @@
+// support for .env, .env.development, and .env.production
+require("dotenv").config()
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })

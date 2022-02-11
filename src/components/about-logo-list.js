@@ -15,8 +15,8 @@ export default function AboutLogoList(props) {
         </Box>
         <Box padding={6}>
           <FlexList gap={5} variant="center">
-            {props.logos.map((logo) => (
-              <li key={logo.id}>
+            {props.logos.map((logo, i) => (
+              <li key={`${logo.id}-${i}`}>
                 <LogoItem {...logo} />
               </li>
             ))}
