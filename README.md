@@ -58,6 +58,13 @@ Once your content is available in WordPress, deploy your site to [Gatsby Cloud](
 
 [![Deploy to Gatsby](https://www.gatsbyjs.com/deploynow.png "Deploy to Gatsby")](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-wordpress-homepage)
 
+## Setting up Gatsby Cloud Preview
+
+To use Gatsby Cloud Preview with this site, see the documentation for
+[Setting up Preview with WPGatsby][].
+
+[setting up preview with wpgatsby]: https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-source-wordpress/docs/tutorials/configuring-wp-gatsby.md#setting-up-preview
+
 ## What's included?
 
 ```sh
