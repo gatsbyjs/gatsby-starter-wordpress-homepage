@@ -3,10 +3,13 @@ import { theme } from "../theme.css"
 import { media } from "./ui.css"
 
 export const desktopHeaderNavWrapper = style({
+  position: "relative",
+  zIndex: 1,
   display: "none",
   "@media": {
     [media.small]: {
       display: "block",
+      paddingTop: theme.space[4],
     },
   },
 })

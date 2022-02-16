@@ -17,6 +17,7 @@ import {
   NavLink,
   Text,
   IconLink,
+  VisuallyHidden,
 } from "./ui"
 import BrandLogo from "./brand-logo"
 
@@ -63,6 +64,10 @@ const getSocialIcon = ({ service }) => {
   return socialMedia[service]?.icon
 }
 
+const getSocialName = ({ service }) => {
+  return socialMedia[service]?.name
+}
+
 export default function Footer(props) {
   const data = useStaticQuery(graphql`
     query {
@@ -97,6 +102,7 @@ export default function Footer(props) {
       <Container>
         <Flex variant="start" responsive>
           <NavLink to="/">
+            <VisuallyHidden>Home</VisuallyHidden>
             <BrandLogo />
           </NavLink>
           <Space />
@@ -107,7 +113,10 @@ export default function Footer(props) {
                 return (
                   url && (
                     <li key={link.id}>
-                      <IconLink to={url}>{getSocialIcon(link)}</IconLink>
+                      <IconLink to={url}>
+                        <VisuallyHidden>{getSocialName(link)}</VisuallyHidden>
+                        {getSocialIcon(link)}
+                      </IconLink>
                     </li>
                   )
                 )

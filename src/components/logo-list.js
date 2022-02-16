@@ -10,7 +10,7 @@ export function LogoItem(props) {
 
 export default function LogoList(props) {
   return (
-    <Section>
+    <Section paddingY={4}>
       <Container width="narrow">
         {props.text && (
           <Text center variant="lead">

@@ -16,7 +16,11 @@ export default function AboutHero(props) {
         )}
       </Container>
       {props.image && (
-        <GatsbyImage alt={props.image.alt} image={getImage(props.image)} />
+        <GatsbyImage
+          alt={props.image.alt}
+          image={getImage(props.image)}
+          className={styles.aboutHeroImage}
+        />
       )}
     </Section>
   )

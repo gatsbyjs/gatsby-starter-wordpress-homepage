@@ -8,7 +8,7 @@ export default function Layout(props) {
   return (
     <>
       <Head {...props} />
-      {/* <Header /> */}
+      <Header />
       {props.children}
       <Footer />
     </>

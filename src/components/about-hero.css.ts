@@ -12,3 +12,7 @@ export const aboutHeroText = style({
   marginBottom: theme.space[6],
   maxWidth: "798px",
 })
+
+export const aboutHeroImage = style({
+  width: "100%",
+})

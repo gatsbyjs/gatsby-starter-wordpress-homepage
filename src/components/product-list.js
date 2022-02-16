@@ -60,6 +60,7 @@ export const query = graphql`
       heading
       text
       image {
+        alt
         id
         gatsbyImageData
       }

@@ -103,7 +103,7 @@ export function Nudge({ left, right, top, bottom, ...props }) {
 }
 
 export function Section(props) {
-  return <Box as="section" paddingY={5} {...props} />
+  return <Box as="section" paddingY={6} {...props} />
 }
 
 export function Text({ variant = "body", center, bold, ...props }) {
@@ -148,6 +148,10 @@ export function Link({ to, href, ...props }) {
 
 export function NavLink({ ...props }) {
   return <Base as={Link} cx={[styles.navlink]} {...props} />
+}
+
+export function NavButtonLink({ ...props }) {
+  return <Base as="button" cx={[styles.navButtonlink]} {...props} />
 }
 
 export function Button({ variant = "primary", ...props }) {
@@ -228,4 +232,8 @@ export function IconLink(props) {
 
 export function InteractiveIcon(props) {
   return <Base as="button" cx={[styles.interactiveIcon]} {...props} />
+}
+
+export function VisuallyHidden(props) {
+  return <Base as="span" cx={[styles.visuallyHidden]} {...props} />
 }

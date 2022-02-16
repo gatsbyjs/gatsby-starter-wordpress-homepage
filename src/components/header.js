@@ -18,6 +18,7 @@ import {
   mobileHeaderNavWrapper,
   mobileNavSVGColorWrapper,
 } from "./header.css.ts"
+import NavItemGroup from "./nav-item-group"
 import BrandLogo from "./brand-logo"
 
 export default function Header() {
@@ -26,10 +27,26 @@ export default function Header() {
       layout {
         header {
           id
-          links {
-            id
-            href
-            text
+          navItems {
+            ... on NavItem {
+              id
+              href
+              text
+            }
+            ... on NavItemGroup {
+              id
+              name
+              navItems {
+                id
+                href
+                text
+                description
+                icon {
+                  alt
+                  gatsbyImageData
+                }
+              }
+            }
           }
           cta {
             id
@@ -41,9 +58,13 @@ export default function Header() {
     }
   `)
 
-  const { links, cta } = data.layout.header
+  const { navItems, cta } = data.layout.header
 
   const [isOpen, setOpen] = React.useState(false)
+
+  const isLinkGroup = React.useCallback((link) => {
+    return "navItems" in link
+  }, [])
 
   React.useEffect(() => {
     if (isOpen) {
@@ -58,21 +79,27 @@ export default function Header() {
       <Container className={desktopHeaderNavWrapper}>
         {/* Desktop / Tablet - Header / Nav */}
         <Space size={2} />
-        <Flex>
+        <Flex variant="spaceBetween">
           <NavLink to="/">
             <BrandLogo />
           </NavLink>
           <nav>
-            <FlexList>
-              {links &&
-                links.map((link) => (
-                  <li key={link.id}>
-                    <NavLink to={link.href}>{link.text}</NavLink>
+            <FlexList gap={4}>
+              {navItems &&
+                navItems.map((navItem) => (
+                  <li key={navItem.id}>
+                    {!isLinkGroup(navItem) ? (
+                      <NavLink to={navItem.href}>{navItem.text}</NavLink>
+                    ) : (
+                      <NavItemGroup
+                        name={navItem.name}
+                        navItems={navItem.navItems}
+                      />
+                    )}
                   </li>
                 ))}
             </FlexList>
           </nav>
-          <Space />
           <div>{cta && <Button to={cta.href}>{cta.text}</Button>}</div>
         </Flex>
       </Container>
@@ -114,12 +141,19 @@ export default function Header() {
         <div className={mobileNavOverlay}>
           <nav>
             <FlexList responsive variant="stretch">
-              {links &&
-                links.map((link) => (
-                  <li key={link.id}>
-                    <NavLink to={link.href} className={mobileNavLink}>
-                      {link.text}
-                    </NavLink>
+              {navItems &&
+                navItems.map((navItem) => (
+                  <li key={navItem.id}>
+                    {!isLinkGroup(navItem) ? (
+                      <NavLink to={navItem.href} className={mobileNavLink}>
+                        {navItem.text}
+                      </NavLink>
+                    ) : (
+                      <NavItemGroup
+                        name={navItem.name}
+                        navItems={navItem.navItems}
+                      />
+                    )}
                   </li>
                 ))}
             </FlexList>

@@ -60,6 +60,16 @@ export const flexVariants = styleVariants({
   start: {
     alignItems: "flex-start",
   },
+  baseline: {
+    alignItems: "baseline",
+  },
+  columnStart: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  column: {
+    flexDirection: "column",
+  },
   end: {
     alignItems: "flex-end",
   },
@@ -319,8 +329,28 @@ export const link = style({
 export const navlink = style({
   color: "inherit",
   textDecoration: "none",
+  transitionProperty: "color",
+  transitionDuration: "0.2s",
+  transitionTimingFunction: "ease-in-out",
   ":hover": {
     color: theme.colors.active,
+  },
+})
+
+export const navButtonlink = style({
+  color: "inherit",
+  fontSize: "inherit",
+  fontFamily: theme.fonts.text,
+  padding: 0,
+  background: "none",
+  border: "none",
+  textDecoration: "none",
+  transitionProperty: "color",
+  transitionDuration: "0.2s",
+  transitionTimingFunction: "ease-in-out",
+  ":hover": {
+    color: theme.colors.active,
+    cursor: "pointer",
   },
 })
 
@@ -474,6 +504,17 @@ export const interactiveIcon = style({
   cursor: "pointer",
   width: 48,
   height: 48,
+})
+
+export const visuallyHidden = style({
+  border: 0,
+  clip: "rect(0 0 0 0)",
+  height: "1px",
+  overflow: "hidden",
+  padding: 0,
+  position: "absolute",
+  whiteSpace: "nowrap",
+  width: "1px",
 })
 
 // for debugging only

@@ -42,8 +42,8 @@ export default function TestimonialList(props) {
           </Heading>
         </Box>
         <FlexList gutter={3} variant="start" responsive wrap>
-          {props.content.map((testimonial) => (
-            <Box as="li" key={testimonial.id} width="half" padding={3}>
+          {props.content.map((testimonial, index) => (
+            <Box as="li" key={testimonial.id + index} width="half" padding={3}>
               <Testimonial {...testimonial} />
             </Box>
           ))}
