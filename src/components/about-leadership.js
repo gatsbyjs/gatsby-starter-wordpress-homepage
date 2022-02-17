@@ -25,9 +25,9 @@ function AboutProfile(props) {
             {props.name}
           </Text>
         )}
-        {props.title && (
+        {props.jobTitle && (
           <Text variant="medium" center>
-            {props.title}
+            {props.jobTitle}
           </Text>
         )}
       </Box>
@@ -63,7 +63,7 @@ export const query = graphql`
     content {
       id
       name
-      title
+      jobTitle
       image {
         gatsbyImageData
         alt
