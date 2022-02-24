@@ -45,7 +45,6 @@ const fontWeights = {
 const fonts = {
   text: '"DM Sans", sans-serif',
   heading: '"DM Sans", sans-serif',
-  serif: '"DM Serif Text", serif',
   mono: "DM Mono, Menlo, monospace",
 }
 
@@ -53,6 +52,7 @@ const lineHeights = {
   text: "1.65",
   heading: "1.25",
   tight: "1.1",
+  solid: "1",
 }
 
 const letterSpacings = {
@@ -64,7 +64,7 @@ const letterSpacings = {
 const sizes = {
   container: "1280px",
   narrow: "1024px",
-  wide: "1280px",
+  wide: "1440px",
   tight: "848px",
   avatar: "48px",
   navGroupBoxMin: "300px",

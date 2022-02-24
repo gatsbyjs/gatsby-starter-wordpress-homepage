@@ -9,7 +9,6 @@
     "react-helmet": "^6.1.0",
     "@fontsource/dm-mono": "^4.5.2",
     "@fontsource/dm-sans": "^4.5.0",
-    "@fontsource/dm-serif-text": "^4.5.0",
     "@vanilla-extract/babel-plugin": "^1.1.4",
     "@vanilla-extract/css": "^1.6.8",
     "@vanilla-extract/css-utils": "^0.1.2",

@@ -13,12 +13,12 @@ import {
 
 function Benefit(props) {
   return (
-    <Box as="li" width="third" padding={3}>
+    <Box as="li" width="third" padding={4} paddingY={3}>
       {props.image && (
         <Icon alt={props.image.alt} image={props.image} size="small" />
       )}
       <Space size={2} />
-      <Heading variant="subhead">{props.heading}</Heading>
+      <Heading variant="subheadSmall">{props.heading}</Heading>
       <Text>{props.text}</Text>
     </Box>
   )

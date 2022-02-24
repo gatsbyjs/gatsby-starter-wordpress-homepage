@@ -6,7 +6,7 @@ import {
   Section,
   Flex,
   Box,
-  Heading,
+  Subhead,
   Kicker,
   Text,
   ButtonList,
@@ -14,7 +14,7 @@ import {
 
 export default function Feature(props) {
   return (
-    <Section paddingY={4} background="muted">
+    <Section padding={4} background="muted">
       <Container>
         <Flex gap={4} variant="responsive">
           <Box width="half" order={props.flip ? 1 : null}>
@@ -26,10 +26,10 @@ export default function Feature(props) {
             )}
           </Box>
           <Box width="half">
-            <Heading>
+            <Subhead>
               {props.kicker && <Kicker>{props.kicker}</Kicker>}
               {props.heading}
-            </Heading>
+            </Subhead>
             <Text variant="lead">{props.text}</Text>
             <ButtonList links={props.links} />
           </Box>

@@ -37,9 +37,9 @@ function AboutProfile(props) {
 
 export default function AboutLeadership(props) {
   return (
-    <Container width="tight">
-      <Section>
-        <Box center padding={5}>
+    <Section>
+      <Container width="tight">
+        <Box center paddingY={4}>
           {props.kicker && <Kicker>{props.kicker}</Kicker>}
           {props.heading && <Heading as="h1">{props.heading}</Heading>}
           {props.subhead && <Text>{props.subhead}</Text>}
@@ -49,8 +49,8 @@ export default function AboutLeadership(props) {
             <AboutProfile key={profile.id} {...profile} />
           ))}
         </FlexList>
-      </Section>
-    </Container>
+      </Container>
+    </Section>
   )
 }
 

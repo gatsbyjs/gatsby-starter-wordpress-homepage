@@ -15,13 +15,15 @@ export default function AboutHero(props) {
           <Text className={styles.aboutHeroText}>{props.text}</Text>
         )}
       </Container>
-      {props.image && (
-        <GatsbyImage
-          alt={props.image.alt}
-          image={getImage(props.image)}
-          className={styles.aboutHeroImage}
-        />
-      )}
+      <Container width="wide">
+        {props.image && (
+          <GatsbyImage
+            alt={props.image.alt}
+            image={getImage(props.image)}
+            className={styles.aboutHeroImage}
+          />
+        )}
+      </Container>
     </Section>
   )
 }

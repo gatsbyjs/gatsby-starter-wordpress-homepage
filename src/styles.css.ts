@@ -6,6 +6,8 @@ globalStyle("body", {
   fontFamily: theme.fonts.text,
   color: theme.colors.text,
   backgroundColor: theme.colors.background,
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
 })
 
 globalStyle("*", {

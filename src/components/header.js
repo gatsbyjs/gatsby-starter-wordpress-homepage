@@ -10,6 +10,7 @@ import {
   Button,
   InteractiveIcon,
   Nudge,
+  VisuallyHidden,
 } from "./ui"
 import {
   mobileNavOverlay,
@@ -81,6 +82,7 @@ export default function Header() {
         <Space size={2} />
         <Flex variant="spaceBetween">
           <NavLink to="/">
+            <VisuallyHidden>Home</VisuallyHidden>
             <BrandLogo />
           </NavLink>
           <nav>
@@ -112,7 +114,10 @@ export default function Header() {
               mobileNavSVGColorWrapper[isOpen ? "reversed" : "primary"]
             }
           >
-            <BrandLogo />
+            <NavLink to="/">
+              <VisuallyHidden>Home</VisuallyHidden>
+              <BrandLogo />
+            </NavLink>
           </span>
           <Flex>
             <Space />

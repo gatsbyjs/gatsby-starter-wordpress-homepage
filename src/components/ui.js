@@ -103,7 +103,7 @@ export function Nudge({ left, right, top, bottom, ...props }) {
 }
 
 export function Section(props) {
-  return <Box as="section" paddingY={6} {...props} />
+  return <Box as="section" className={styles.section} {...props} />
 }
 
 export function Text({ variant = "body", center, bold, ...props }) {
