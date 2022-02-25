@@ -46,8 +46,7 @@ const navLinkListWrapperBase = style({
       borderRadius: theme.radii.large,
       minWidth: theme.sizes.navGroupBoxMin,
       maxWidth: theme.sizes.navGroupBoxMax,
-      boxShadow:
-        "0px 4px 8px 0px #2E29330A, 0px 4px 24px 0px #2E293314, 0px 8px 24px 0px #473F4F29",
+      boxShadow: theme.shadows.large,
       selectors: {
         "&::before": {
           content: "",

@@ -1,5 +1,4 @@
 import * as React from "react"
-import { graphql, useStaticQuery } from "gatsby"
 import { Menu, X } from "react-feather"
 import {
   Container,
@@ -19,53 +18,44 @@ import {
   mobileHeaderNavWrapper,
   mobileNavSVGColorWrapper,
 } from "./header.css.ts"
-import NavItemGroup from "./nav-item-group"
 import BrandLogo from "./brand-logo"
 
+const data = {
+  navItems: [
+    {
+      id: 0,
+      navItemType: "Link",
+      href: "#!",
+      text: "Products",
+    },
+    {
+      id: 1,
+      navItemType: "Link",
+      href: "#!",
+      text: "Pricing",
+    },
+    {
+      id: 2,
+      navItemType: "Link",
+      href: "/about",
+      text: "About",
+    },
+    {
+      id: 3,
+      navItemType: "Link",
+      href: "#!",
+      text: "Blog",
+    },
+  ],
+  cta: {
+    href: "#!",
+    text: "Sign Up",
+  },
+}
+
 export default function Header() {
-  const data = useStaticQuery(graphql`
-    query {
-      layout {
-        header {
-          id
-          navItems {
-            ... on NavItem {
-              id
-              href
-              text
-            }
-            ... on NavItemGroup {
-              id
-              name
-              navItems {
-                id
-                href
-                text
-                description
-                icon {
-                  alt
-                  gatsbyImageData
-                }
-              }
-            }
-          }
-          cta {
-            id
-            href
-            text
-          }
-        }
-      }
-    }
-  `)
-
-  const { navItems, cta } = data.layout.header
-
+  const { navItems, cta } = data // .layout.header
   const [isOpen, setOpen] = React.useState(false)
-
-  const isLinkGroup = React.useCallback((link) => {
-    return "navItems" in link
-  }, [])
 
   React.useEffect(() => {
     if (isOpen) {
@@ -78,7 +68,6 @@ export default function Header() {
   return (
     <header>
       <Container className={desktopHeaderNavWrapper}>
-        {/* Desktop / Tablet - Header / Nav */}
         <Space size={2} />
         <Flex variant="spaceBetween">
           <NavLink to="/">
@@ -90,14 +79,7 @@ export default function Header() {
               {navItems &&
                 navItems.map((navItem) => (
                   <li key={navItem.id}>
-                    {!isLinkGroup(navItem) ? (
-                      <NavLink to={navItem.href}>{navItem.text}</NavLink>
-                    ) : (
-                      <NavItemGroup
-                        name={navItem.name}
-                        navItems={navItem.navItems}
-                      />
-                    )}
+                    <NavLink to={navItem.href}>{navItem.text}</NavLink>
                   </li>
                 ))}
             </FlexList>
@@ -105,7 +87,6 @@ export default function Header() {
           <div>{cta && <Button to={cta.href}>{cta.text}</Button>}</div>
         </Flex>
       </Container>
-      {/* Mobile - Header / Nav */}
       <Container className={mobileHeaderNavWrapper[isOpen ? "open" : "closed"]}>
         <Space size={2} />
         <Flex variant="spaceBetween">
@@ -146,21 +127,13 @@ export default function Header() {
         <div className={mobileNavOverlay}>
           <nav>
             <FlexList responsive variant="stretch">
-              {navItems &&
-                navItems.map((navItem) => (
-                  <li key={navItem.id}>
-                    {!isLinkGroup(navItem) ? (
-                      <NavLink to={navItem.href} className={mobileNavLink}>
-                        {navItem.text}
-                      </NavLink>
-                    ) : (
-                      <NavItemGroup
-                        name={navItem.name}
-                        navItems={navItem.navItems}
-                      />
-                    )}
-                  </li>
-                ))}
+              {navItems?.map((navItem) => (
+                <li key={navItem.id}>
+                  <NavLink to={navItem.href} className={mobileNavLink}>
+                    {navItem.text}
+                  </NavLink>
+                </li>
+              ))}
             </FlexList>
           </nav>
         </div>

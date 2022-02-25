@@ -101,7 +101,7 @@ export default function NavItemGroup({ name, navItems }) {
                         className={styles.navIcon}
                       />
                     )}
-                    <Flex variant="columnStart" gap={1}>
+                    <Flex variant="columnStart" marginY={1} gap={0}>
                       <Box as="span" className={styles.navLinkTitle}>
                         {navItem.text}
                       </Box>

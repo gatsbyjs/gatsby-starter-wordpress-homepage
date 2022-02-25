@@ -1,5 +1,4 @@
 import * as React from "react"
-import { graphql, useStaticQuery } from "gatsby"
 import {
   Twitter,
   Twitch,
@@ -68,34 +67,72 @@ const getSocialName = ({ service }) => {
   return socialMedia[service]?.name
 }
 
-export default function Footer(props) {
-  const data = useStaticQuery(graphql`
-    query {
-      layout {
-        footer {
-          id
-          links {
-            id
-            href
-            text
-          }
-          meta {
-            id
-            href
-            text
-          }
-          copyright
-          socialLinks {
-            id
-            service
-            username
-          }
-        }
-      }
-    }
-  `)
+const data = {
+  links: [
+    {
+      id: 0,
+      href: "#!",
+      text: "Products",
+    },
+    {
+      id: 1,
+      href: "#!",
+      text: "Pricing",
+    },
+    {
+      id: 2,
+      href: "/about",
+      text: "About",
+    },
+    {
+      id: 3,
+      href: "#!",
+      text: "Blog",
+    },
+  ],
+  meta: [
+    {
+      id: 0,
+      href: "/terms",
+      text: "Terms",
+    },
+    {
+      id: 1,
+      href: "/privacy",
+      text: "Privacy Policy",
+    },
+  ],
+  socialLinks: [
+    {
+      service: "TWITTER",
+      username: "gatsbyjs",
+    },
+    {
+      service: "INSTAGRAM",
+      username: "gatsbyjs",
+    },
+    {
+      service: "GITHUB",
+      username: "gatsbyjs",
+    },
+    {
+      service: "FACEBOOK",
+      username: "gatsbyjs",
+    },
+    {
+      service: "YOUTUBE",
+      username: "gatsbyjs",
+    },
+    {
+      service: "TWITCH",
+      username: "gatsbyjs",
+    },
+  ],
+  copyright: "© 2022 Gatsby Inc. All rights reserved",
+}
 
-  const { links, meta, socialLinks, copyright } = data.layout.footer
+export default function Footer(props) {
+  const { links, meta, socialLinks, copyright } = data
 
   return (
     <Box as="footer" paddingY={4}>

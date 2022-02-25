@@ -1,28 +1,6 @@
 exports.createSchemaCustomization = async ({ actions }) => {
   actions.createFieldExtension({
-    name: "blocktype",
-    extend(options) {
-      return {
-        resolve(source) {
-          return source.internal.type.replace("Wp", "Homepage")
-        },
-      }
-    },
-  })
-
-  actions.createFieldExtension({
-    name: "recursiveImage",
-    extend(options) {
-      return {
-        async resolve(source, args, context, info) {
-          return source
-        },
-      }
-    },
-  })
-
-  actions.createFieldExtension({
-    name: "proxyImage",
+    name: "wpImagePassthroughResolver",
     extend(options) {
       return {
         async resolve(source, args, context, info) {
@@ -39,109 +17,47 @@ exports.createSchemaCustomization = async ({ actions }) => {
     },
   })
 
+  actions.createFieldExtension({
+    name: "wpRecursiveImage",
+    extend(options) {
+      return {
+        async resolve(source, args, context, info) {
+          return source
+        },
+      }
+    },
+  })
+
   // abstract interfaces
   actions.createTypes(/* GraphQL */ `
     interface HomepageBlock implements Node {
       id: ID!
       blocktype: String
+      originalId: String
     }
 
     interface HomepageImage implements Node {
       id: ID!
       alt: String
-      gatsbyImageData: JSON @proxyImage
-      image: HomepageImage @recursiveImage
+      gatsbyImageData: JSON
+      image: HomepageImage
       localFile: File
       url: String
     }
 
-    interface HomepageFeature implements Node & HomepageBlock {
-      id: ID!
-      blocktype: String
-      heading: String
-      kicker: String
-      text: String
-      image: HomepageImage
-      links: [HomepageLink]
-    }
-
-    interface HomepageTestimonial implements Node {
-      id: ID!
-      quote: String
-      source: String
-      avatar: HomepageImage
-    }
-
-    interface HomepageBenefit implements Node {
-      id: ID!
-      heading: String
-      text: String
-      image: HomepageImage
-    }
-
-    interface HomepageProduct implements Node {
-      id: ID!
-      heading: String
-      text: String
-      image: HomepageImage
-      links: [HomepageLink]
-    }
-
-    interface LayoutHeader implements Node {
-      id: ID!
-      contentTypeName: String!
-      links: [HomepageLink]
-      cta: HomepageLink
-    }
-
-    enum SocialService {
-      TWITTER
-      FACEBOOK
-      INSTAGRAM
-      YOUTUBE
-      LINKEDIN
-      GITHUB
-      DISCORD
-      TWITCH
-    }
-
-    interface LayoutFooter implements Node {
-      id: ID!
-      contentTypeName: String!
-      links: [HomepageLink]
-      meta: [HomepageLink]
-      socialLinks: [SocialLink]
-      copyright: String
-    }
-
-    interface AboutProfile implements Node {
-      id: ID!
-      image: HomepageImage
-      name: String
-      jobTitle: String
-    }
-
-    interface Page implements Node {
-      id: ID!
-      slug: String!
-      title: String
-      description: String
-      image: HomepageImage
-      html: String
-    }
-  `)
-
-  // creating custom types because WP does not provide these
-  actions.createTypes(/* GraphQL */ `
-    type HomepageLink implements Node {
+    interface HomepageLink implements Node {
       id: ID!
       href: String
       text: String
     }
+  `)
 
+  // blocks
+  actions.createTypes(/* GraphQL */ `
     type HomepageHero implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       heading: String!
       kicker: String
       subhead: String
@@ -153,6 +69,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
     type HomepageCta implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       kicker: String
       heading: String
       text: String
@@ -160,18 +77,60 @@ exports.createSchemaCustomization = async ({ actions }) => {
       image: HomepageImage @link
     }
 
+    type HomepageFeature implements Node & HomepageBlock {
+      id: ID!
+      blocktype: String
+      originalId: String
+      heading: String
+      kicker: String
+      text: String
+      image: HomepageImage @link
+      links: [HomepageLink] @link
+    }
+
+    type HomepageTestimonial implements Node {
+      id: ID!
+      quote: String
+      source: String
+      avatar: HomepageImage @link
+    }
+
+    type HomepageBenefit implements Node {
+      id: ID!
+      heading: String
+      text: String
+      image: HomepageImage @link
+    }
+
+    type HomepageLogo implements Node {
+      id: ID!
+      originalId: String
+      image: HomepageImage @link
+      alt: String @proxy(from: "image.title")
+    }
+
+    type HomepageProduct implements Node {
+      id: ID!
+      heading: String
+      text: String
+      image: HomepageImage @link
+      links: [HomepageLink] @link
+    }
+
     type HomepageFeatureList implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       kicker: String
       heading: String
       text: String
-      content: [HomepageFeature] @link
+      content: [HomepageFeature] @link(by: "originalId")
     }
 
     type HomepageLogoList implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       text: String
       logos: [HomepageImage] @link
     }
@@ -179,17 +138,19 @@ exports.createSchemaCustomization = async ({ actions }) => {
     type HomepageTestimonialList implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       kicker: String
       heading: String
-      content: [HomepageTestimonial] @link
+      content: [HomepageTestimonial] @link(by: "originalId")
     }
 
     type HomepageBenefitList implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       heading: String
       text: String
-      content: [HomepageBenefit] @link
+      content: [HomepageBenefit] @link(by: "originalId")
     }
 
     type HomepageStat implements Node {
@@ -202,69 +163,85 @@ exports.createSchemaCustomization = async ({ actions }) => {
     type HomepageStatList implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       kicker: String
       heading: String
       text: String
       image: HomepageImage @link
       icon: HomepageImage @link
-      content: [HomepageStat] @link
+      content: [HomepageStat] @link(by: "originalId")
       links: [HomepageLink] @link
     }
 
     type HomepageProductList implements Node & HomepageBlock {
       id: ID!
       blocktype: String
+      originalId: String
       kicker: String
       heading: String
       text: String
-      content: [HomepageProduct] @link
+      content: [HomepageProduct] @link(by: "originalId")
     }
 
-    type Homepage implements Node {
-      id: ID!
-      title: String
-      description: String
-      image: HomepageImage @link
-      content: [HomepageBlock] @link
-    }
-  `)
-
-  actions.createTypes(/* GraphQL */ `
     type AboutHero implements Node & HomepageBlock {
       id: ID!
-      blocktype: String
+      originalId: String
       heading: String
       text: String
       image: HomepageImage @link
     }
 
-    type AboutStat implements Node {
+    type AboutStat implements Node & HomepageBlock {
       id: ID!
+      originalId: String
+      blocktype: String
       value: String
       label: String
     }
 
     type AboutStatList implements Node & HomepageBlock {
       id: ID!
+      originalId: String
       blocktype: String
-      content: [AboutStat] @link
+      content: [AboutStat] @link(by: "originalId")
+    }
+
+    type AboutProfile implements Node {
+      id: ID!
+      originalId: String
+      image: HomepageImage @link
+      name: String
+      jobTitle: String
     }
 
     type AboutLeadership implements Node & HomepageBlock {
       id: ID!
+      originalId: String
       blocktype: String
       kicker: String
       heading: String
       subhead: String
-      content: [AboutProfile] @link
+      content: [AboutProfile] @link(by: "originalId")
     }
 
     type AboutLogoList implements Node & HomepageBlock {
       id: ID!
+      originalId: String
       blocktype: String
       heading: String
       links: [HomepageLink] @link
       logos: [HomepageImage] @link
+    }
+  `)
+
+  // pages
+  actions.createTypes(/* GraphQL */ `
+    type Homepage implements Node {
+      id: ID!
+      title: String
+      description: String
+      image: HomepageImage @link
+      content: [HomepageBlock] @link(by: "originalId")
     }
 
     type AboutPage implements Node {
@@ -272,626 +249,417 @@ exports.createSchemaCustomization = async ({ actions }) => {
       title: String
       description: String
       image: HomepageImage @link
-      content: [HomepageBlock] @link
+      content: [HomepageBlock] @link(by: "originalId")
+    }
+
+    type Page implements Node {
+      id: ID!
+      slug: String!
+      title: String
+      description: String
+      image: HomepageImage @link
+      html: String
     }
   `)
 
+  // WordPress types
   actions.createTypes(/* GraphQL */ `
     type WpMediaItem implements Node & HomepageImage {
       id: ID!
       alt: String @proxy(from: "altText")
-      gatsbyImageData: JSON @proxyImage
-      image: HomepageImage @recursiveImage
+      altText: String
+      gatsbyImageData: JSON @wpImagePassthroughResolver
+      image: HomepageImage @wpRecursiveImage
       localFile: File
       url: String @proxy(from: "mediaItemUrl")
       mediaItemUrl: String
     }
 
-    type WpBenefit implements Node & HomepageBenefit {
+    type WpHomepageLink implements Node & HomepageLink {
       id: ID!
-      heading: String @proxy(from: "benefit.heading")
-      text: String @proxy(from: "benefit.text")
-      image: HomepageImage @link @proxy(from: "benefit.image.id")
+      href: String @proxy(from: "wpFields.link.url")
+      text: String @proxy(from: "wpFields.link.title")
+      wpFields: JSON
     }
 
-    type WpAboutProfile implements Node & AboutProfile {
+    type WpBlocktype implements Node {
       id: ID!
-      aboutProfile: JSON
-      jobTitle: String @proxy(from: "aboutProfile.jobTitle")
-      name: String @proxy(from: "aboutProfile.name")
-      image: HomepageImage @link @proxy(from: "aboutProfile.image.id")
+      name: String
     }
 
-    type WpProduct implements Node & HomepageProduct {
+    type WpCategory implements Node {
       id: ID!
-      heading: String @proxy(from: "product.heading")
-      text: String @proxy(from: "product.text")
-      image: HomepageImage @link @proxy(from: "product.image.id")
-      links: [HomepageLink] @link @proxy(from: "fields.links")
+      name: String
     }
 
-    type WpFeature implements Node & HomepageFeature & HomepageBlock {
+    type WpHomepageBlock implements Node {
       id: ID!
-      blocktype: String @blocktype
+      blocktypes: [WpBlocktype]
+      benefitList: JSON
+      cta: JSON
       feature: JSON
-      heading: String @proxy(from: "feature.heading")
-      kicker: String @proxy(from: "feature.kicker")
-      text: String @proxy(from: "feature.text")
-      image: HomepageImage @link @proxy(from: "feature.image.id")
-      links: [HomepageLink] @proxy(from: "fields.links") @link
+      featureList: JSON
+      hero: JSON
+      logoList: JSON
+      productList: JSON
+      statList: JSON
+      testimonialList: JSON
+      aboutHero: JSON
+      aboutLeadership: JSON
+      aboutLogoList: JSON
+      aboutStatList: JSON
     }
 
-    type WpTestimonial implements Node & HomepageTestimonial {
+    type WpHomepageItem implements Node {
       id: ID!
-      quote: String @proxy(from: "testimonial.quote")
-      source: String @proxy(from: "testimonial.source")
-      avatar: HomepageImage @link @proxy(from: "testimonial.avatar.id")
-    }
-
-    type WpPage implements Node & Page {
-      id: ID!
-      slug: String!
-      title: String
-      description: String
-      image: HomepageImage @link @proxy(from: "featuredImageId")
-      content: String
-      html: String @proxy(from: "content")
-    }
-  `)
-
-  // Layout types
-  actions.createTypes(/* GraphQL */ `
-    type WpHeader implements Node & LayoutHeader {
-      id: ID!
-      contentTypeName: String!
-      links: [HomepageLink] @link @proxy(from: "fields.links")
-      cta: HomepageLink @link @proxy(from: "fields.cta")
-    }
-
-    type SocialLink implements Node {
-      id: ID!
-      username: String!
-      service: SocialService!
-    }
-
-    type WpFooter implements Node & LayoutFooter {
-      id: ID!
-      contentTypeName: String!
-      links: [HomepageLink] @link @proxy(from: "fields.links")
-      meta: [HomepageLink] @link @proxy(from: "fields.meta")
-      socialLinks: [SocialLink] @link @proxy(from: "fields.socialLinks")
-      copyright: String @proxy(from: "footer.copyright")
-    }
-
-    type Layout implements Node {
-      id: ID!
-      header: LayoutHeader @link(by: "contentTypeName")
-      footer: LayoutFooter @link(by: "contentTypeName")
+      categories: [WpCategory]
+      aboutProfile: JSON
+      aboutStat: JSON
+      benefit: JSON
+      product: JSON
+      stat: JSON
+      testimonial: JSON
     }
   `)
 }
 
-exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
-  actions.createNode({
-    id: createNodeId("HomepageLayout"),
-    internal: {
-      type: "Layout",
-      contentDigest: createContentDigest("Layout"),
-    },
-    header: "header",
-    footer: "footer",
-  })
-}
-
-exports.onCreateNode = ({
-  actions,
-  node,
-  createNodeId,
-  createContentDigest,
-}) => {
+exports.onCreateNode = ({ node, actions, getNode, createNodeId, reporter }) => {
   if (!node.internal.type.includes("Wp")) return
 
-  const createLinkNode =
-    (parentId) =>
-    ({ title, url }, i) => {
-      const linkID = createNodeId(`${parentId} >>> HomepageLink ${i}`)
-      actions.createNode({
-        id: linkID,
-        internal: {
-          type: "HomepageLink",
-          contentDigest: createContentDigest(JSON.stringify({ title, url })),
-        },
-        href: url,
-        text: title,
-      })
-      return linkID
-    }
-
-  switch (node.internal.type) {
-    case "WpPage":
-      if (node.slug === "homepage") {
-        const {
-          homepageHero,
-          homepageCta,
-          statList,
-          testimonialList,
-          productList,
-          logoList,
-          featureList,
-          benefitList,
-        } = node
-
-        const heroID = createNodeId(`${node.id} >>> HomepageHero`)
-        const ctaID = createNodeId(`${node.id} >>> HomepageCta`)
-        const statsID = createNodeId(`${node.id} >>> HomepageStatList`)
-        const testimonialsID = createNodeId(
-          `${node.id} >>> HomepageTestimonialList`
-        )
-        const productsID = createNodeId(`${node.id} >>> HomepageProductList`)
-        const logosID = createNodeId(`${node.id} >>> HomepageLogoList`)
-        const featuresID = createNodeId(`${node.id} >>> HomepageFeatureList`)
-        const benefitsID = createNodeId(`${node.id} >>> HomepageBenefitList`)
-
+  if (node.internal.type === "WpHomepageBlock") {
+    if (node.blocktypes.nodes.length < 1) return
+    const blocktype = getNode(node.blocktypes.nodes[0].id)
+    switch (blocktype.name) {
+      case "Hero":
         actions.createNode({
-          id: heroID,
+          ...node.hero,
+          id: createNodeId(`${node.id} >>> HomepageHero`),
           internal: {
             type: "HomepageHero",
-            contentDigest: createContentDigest(JSON.stringify(homepageHero)),
+            contentDigest: node.internal.contentDigest,
           },
-          parent: node.id,
           blocktype: "HomepageHero",
-          image: homepageHero.heroImage.id,
-          kicker: homepageHero.heroKicker,
-          heading: homepageHero.heroHeading,
-          text: homepageHero.heroText,
-          links: [homepageHero.heroLink, homepageHero.heroSecondaryLink]
-            .filter(Boolean)
-            .map(createLinkNode(heroID)),
+          parent: node.id,
+          originalId: node.id,
+          image: node.hero.image?.id,
+          links: node.hero.links?.map((link) => link.id),
         })
-
+        break
+      case "Cta":
         actions.createNode({
-          id: ctaID,
+          ...node.cta,
+          id: createNodeId(`${node.id} >>> HomepageCta`),
           internal: {
             type: "HomepageCta",
-            contentDigest: createContentDigest(JSON.stringify(homepageCta)),
+            contentDigest: node.internal.contentDigest,
           },
-          parent: node.id,
           blocktype: "HomepageCta",
-          kicker: homepageCta.ctaKicker,
-          heading: homepageCta.ctaHeading,
-          text: homepageCta.ctaText,
-          links: [homepageCta.ctaLink, homepageCta.ctaSecondaryLink]
-            .filter(Boolean)
-            .map(createLinkNode(ctaID)),
-          image: homepageCta.ctaImage.id,
-        })
-
-        actions.createNode({
-          id: statsID,
-          internal: {
-            type: "HomepageStatList",
-            contentDigest: createContentDigest(JSON.stringify(statList)),
-          },
+          originalId: node.id,
           parent: node.id,
-          blocktype: "HomepageStatList",
-          kicker: statList.statsKicker,
-          heading: statList.statsHeading,
-          text: statList.statsText,
-          links: [
-            statList.statsLink && createLinkNode(statsID)(statList.statsLink),
-          ].filter(Boolean),
-          icon: statList.statsIcon.id,
-          image: statList.statsImage.id,
-          content: [
-            {
-              value: statList.stat1,
-              label: statList.stat1label,
-            },
-            {
-              value: statList.stat2,
-              label: statList.stat2label,
-            },
-            {
-              value: statList.stat3,
-              label: statList.stat3label,
-            },
-          ].map((stat, i) => {
-            const id = createNodeId(`${statsID} >>> HomepageStat ${i}`)
-            actions.createNode({
-              ...stat,
-              id,
-              internal: {
-                type: "HomepageStat",
-                contentDigest: createContentDigest(stat),
-              },
-            })
-            return id
-          }),
+          image: node.cta.image?.id,
+          links: node.cta.links?.map((link) => link.id),
         })
-
+        break
+      case "Feature":
         actions.createNode({
-          id: testimonialsID,
+          ...node.feature,
+          id: createNodeId(`${node.id} >>> HomepageFeature`),
           internal: {
-            type: "HomepageTestimonialList",
-            contentDigest: createContentDigest(JSON.stringify(testimonialList)),
+            type: "HomepageFeature",
+            contentDigest: node.internal.contentDigest,
           },
+          blocktype: "HomepageFeature",
+          originalId: node.id,
           parent: node.id,
-          blocktype: "HomepageTestimonialList",
-          kicker: testimonialList.testimonialsKicker,
-          heading: testimonialList.testimonialsHeading,
-          content: [
-            testimonialList.testimonial1,
-            testimonialList.testimonial2,
-            testimonialList.testimonial3,
-            testimonialList.testimonial4,
-          ].map((testimonial) => testimonial.id),
+          image: node.feature.image?.id,
+          links: node.feature.links?.filter(Boolean).map((link) => link.id),
         })
-
+        break
+      case "FeatureList":
         actions.createNode({
-          id: productsID,
-          internal: {
-            type: "HomepageProductList",
-            contentDigest: createContentDigest(JSON.stringify(productList)),
-          },
-          parent: node.id,
-          blocktype: "HomepageProductList",
-          kicker: productList.productsKicker,
-          heading: productList.productsHeading,
-          content: [
-            productList.product1,
-            productList.product2,
-            productList.product3,
-          ].map((product) => product.id),
-        })
-
-        actions.createNode({
-          id: logosID,
-          internal: {
-            type: "HomepageLogoList",
-            contentDigest: createContentDigest(JSON.stringify(logoList)),
-          },
-          parent: node.id,
-          blocktype: "HomepageLogoList",
-          text: logoList.logosText,
-          logos: [
-            logoList.logo1,
-            logoList.logo2,
-            logoList.logo3,
-            logoList.logo4,
-            logoList.logo5,
-          ].map((logo) => logo.id),
-        })
-
-        actions.createNode({
-          id: featuresID,
+          ...node.featureList,
+          id: createNodeId(`${node.id} >>> HomepageFeatureList`),
           internal: {
             type: "HomepageFeatureList",
-            contentDigest: createContentDigest(JSON.stringify(featureList)),
+            contentDigest: node.internal.contentDigest,
           },
-          parent: node.id,
           blocktype: "HomepageFeatureList",
-          kicker: featureList.featuresKicker,
-          heading: featureList.featuresHeading,
-          text: featureList.featuresText,
-          content: [featureList.feature1, featureList.feature2].map(
-            (feature) => feature.id
-          ),
+          originalId: node.id,
+          parent: node.id,
+          content: node.featureList.content?.map((item) => item.id),
         })
-
+        break
+      case "BenefitList":
         actions.createNode({
-          id: benefitsID,
+          ...node.benefitList,
+          id: createNodeId(`${node.id} >>> HomepageBenefitList`),
           internal: {
             type: "HomepageBenefitList",
-            contentDigest: createContentDigest(JSON.stringify(benefitList)),
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "HomepageBenefitList",
+          originalId: node.id,
+          parent: node.id,
+          content: node.benefitList.content?.map((item) => item.id),
+        })
+        break
+      case "LogoList":
+        actions.createNode({
+          ...node.logoList,
+          id: createNodeId(`${node.id} >>> HomepageLogoList`),
+          internal: {
+            type: "HomepageLogoList",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "HomepageLogoList",
+          originalId: node.id,
+          parent: node.id,
+          logos: node.logoList.logos?.map((logo) => logo.id),
+        })
+        break
+      case "AboutLogoList":
+        actions.createNode({
+          ...node.aboutLogoList,
+          id: createNodeId(`${node.id} >>> AboutLogoList`),
+          internal: {
+            type: "AboutLogoList",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "AboutLogoList",
+          originalId: node.id,
+          parent: node.id,
+          logos: node.aboutLogoList.logos?.map((logo) => logo.id),
+          links: node.aboutLogoList.links?.map((link) => link.id),
+        })
+        break
+      case "ProductList":
+        actions.createNode({
+          ...node.productList,
+          id: createNodeId(`${node.id} >>> HomepageProductList`),
+          internal: {
+            type: "HomepageProductList",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "HomepageProductList",
+          originalId: node.id,
+          parent: node.id,
+          content: node.productList.content?.map((item) => item.id),
+        })
+        break
+      case "StatList":
+        actions.createNode({
+          ...node.statList,
+          id: createNodeId(`${node.id} >>> HomepageStatList`),
+          internal: {
+            type: "HomepageStatList",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "HomepageStatList",
+          originalId: node.id,
+          parent: node.id,
+          icon: node.statList.icon?.id,
+          image: node.statList.image?.id,
+          content: node.statList.content?.map((item) => item.id),
+          links: node.statList.links?.map((link) => link.id),
+        })
+        break
+      case "TestimonialList":
+        actions.createNode({
+          ...node.testimonialList,
+          id: createNodeId(`${node.id} >>> HomepageTestimonialList`),
+          internal: {
+            type: "HomepageTestimonialList",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "HomepageTestimonialList",
+          originalId: node.id,
+          parent: node.id,
+          content: node.testimonialList.content?.map((item) => item.id),
+        })
+        break
+      case "AboutHero":
+        actions.createNode({
+          ...node.aboutHero,
+          id: createNodeId(`${node.id} >>> AboutHero`),
+          internal: {
+            type: "AboutHero",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "AboutHero",
+          parent: node.id,
+          originalId: node.id,
+          image: node.aboutHero.image?.id,
+        })
+        break
+      case "AboutStatList":
+        actions.createNode({
+          id: createNodeId(`${node.id} >>> AboutStatList`),
+          internal: {
+            type: "AboutStatList",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "AboutStatList",
+          parent: node.id,
+          originalId: node.id,
+          content: node.aboutStatList.content?.map((item) => item.id),
+        })
+        break
+      case "AboutLeadership":
+        actions.createNode({
+          ...node.aboutLeadership,
+          id: createNodeId(`${node.id} >>> AboutLeadership`),
+          internal: {
+            type: "AboutLeadership",
+            contentDigest: node.internal.contentDigest,
+          },
+          blocktype: "AboutLeadership",
+          parent: node.id,
+          originalId: node.id,
+          content: node.aboutLeadership.content?.map((item) => item.id),
+        })
+        break
+      default:
+        reporter.warn(
+          `Unknown HomepageBlock type: ${blocktype.name} sourced from WordPress. This will not be used.`
+        )
+        break
+    }
+  } else if (node.internal.type === "WpHomepageItem") {
+    if (node.categories.nodes.length < 1) return
+    const category = getNode(node.categories.nodes[0].id)
+    if (!category) {
+      reporter.warn(`No category found for ${node.id} ${node.title} – skipping`)
+      return
+    }
+    switch (category.name) {
+      case "Benefit":
+        actions.createNode({
+          ...node.benefit,
+          id: createNodeId(`${node.id} >>> Benefit`),
+          internal: {
+            type: "HomepageBenefit",
+            contentDigest: node.internal.contentDigest,
           },
           parent: node.id,
-          blocktype: "HomepageBenefitList",
-          heading: benefitList.benefitsHeading,
-          text: benefitList.benefitsText,
-          content: [
-            benefitList.benefit1,
-            benefitList.benefit2,
-            benefitList.benefit3,
-          ].map((benefit) => benefit.id),
+          originalId: node.id,
+          image: node.benefit.image?.id,
         })
-
+        break
+      case "Product":
         actions.createNode({
-          ...node,
+          ...node.product,
+          id: createNodeId(`${node.id} >>> Product`),
+          internal: {
+            type: "HomepageProduct",
+            contentDigest: node.internal.contentDigest,
+          },
+          parent: node.id,
+          originalId: node.id,
+          image: node.product.image?.id,
+          links: node.product.links?.map((link) => link.id),
+        })
+        break
+      case "Stat":
+        actions.createNode({
+          ...node.stat,
+          id: createNodeId(`${node.id} >>> Stat`),
+          internal: {
+            type: "HomepageStat",
+            contentDigest: node.internal.contentDigest,
+          },
+          parent: node.id,
+          originalId: node.id,
+        })
+        break
+      case "Testimonial":
+        actions.createNode({
+          ...node.testimonial,
+          id: createNodeId(`${node.id} >>> Testimonial`),
+          internal: {
+            type: "HomepageTestimonial",
+            contentDigest: node.internal.contentDigest,
+          },
+          parent: node.id,
+          originalId: node.id,
+          avatar: node.testimonial.avatar?.id,
+        })
+        break
+      case "AboutStat":
+        actions.createNode({
+          ...node.aboutStat,
+          id: createNodeId(`${node.id} >>> AboutStat`),
+          internal: {
+            type: "AboutStat",
+            contentDigest: node.internal.contentDigest,
+          },
+          parent: node.id,
+          originalId: node.id,
+        })
+        break
+      case "AboutProfile":
+        actions.createNode({
+          ...node.aboutProfile,
+          id: createNodeId(`${node.id} >>> AboutProfile`),
+          internal: {
+            type: "AboutProfile",
+            contentDigest: node.internal.contentDigest,
+          },
+          parent: node.id,
+          originalId: node.id,
+          image: node.aboutProfile.image?.id,
+        })
+        break
+      default:
+        reporter.warn(
+          `Unknown HomepageItem category: ${category.name} sourced from WordPress. This will not be used.`
+        )
+    }
+  } else if (node.internal.type === "WpPage") {
+    switch (node.slug) {
+      case "homepage":
+        actions.createNode({
+          ...node.homepage,
           id: createNodeId(`${node.id} >>> Homepage`),
           internal: {
             type: "Homepage",
             contentDigest: node.internal.contentDigest,
           },
           parent: node.id,
-          blocktype: "Homepage",
-          image: node.featuredImageId,
-          content: [
-            heroID,
-            logosID,
-            productsID,
-            featuresID,
-            benefitsID,
-            statsID,
-            testimonialsID,
-            ctaID,
-          ],
+          title: node.title,
+          image: node.featuredImage?.node?.id,
+          content: node.homepage?.blocks?.map((block) => block.id),
         })
-
-        // delete the node because we're not using it in `src/pages/{Page.slug}.js`
-        actions.deleteNode(node, { name: "gatsby-source-wordpress" })
         break
-      } else if (node.slug === "about") {
-        const {
-          aboutHero,
-          aboutStatList,
-          aboutLeadership,
-          benefitList,
-          aboutLogoList,
-          homepageCta,
-        } = node
-
-        const aboutHeroID = createNodeId(`${node.id} >>> AboutHero`)
-        const aboutStatsID = createNodeId(`${node.id} >>> AboutStatList`)
-        const aboutLeadershipID = createNodeId(`${node.id} >>> AboutLeadership`)
-        const aboutLogosID = createNodeId(`${node.id} >>> AboutLogoList`)
-        const aboutBenefitsID = createNodeId(
-          `${node.id} >>> HomepageBenefitList`
-        )
-        const aboutCtaID = createNodeId(`${node.id} >>> HomepageCta`)
-
+      case "about":
         actions.createNode({
-          id: aboutHeroID,
-          internal: {
-            type: "AboutHero",
-            contentDigest: createContentDigest(JSON.stringify(aboutHero)),
-          },
-          parent: node.id,
-          blocktype: "AboutHero",
-          image: aboutHero.aboutHeroImage.id,
-          heading: aboutHero.aboutHeroHeading,
-          text: aboutHero.aboutHeroText,
-        })
-
-        actions.createNode({
-          id: aboutStatsID,
-          internal: {
-            type: "AboutStatList",
-            contentDigest: createContentDigest(JSON.stringify(aboutStatList)),
-          },
-          parent: node.id,
-          blocktype: "AboutStatList",
-          content: [
-            {
-              value: aboutStatList.stat1,
-              label: aboutStatList.stat1Label,
-            },
-            {
-              value: aboutStatList.stat2,
-              label: aboutStatList.stat2Label,
-            },
-            {
-              value: aboutStatList.stat3,
-              label: aboutStatList.stat3Label,
-            },
-            {
-              value: aboutStatList.stat4,
-              label: aboutStatList.stat4Label,
-            },
-          ].map((stat, i) => {
-            const id = createNodeId(`${aboutStatsID} >>> AboutStat ${i}`)
-            actions.createNode({
-              ...stat,
-              id,
-              internal: {
-                type: "AboutStat",
-                contentDigest: createContentDigest(stat),
-              },
-            })
-            return id
-          }),
-        })
-
-        actions.createNode({
-          id: aboutLeadershipID,
-          internal: {
-            type: "AboutLeadership",
-            contentDigest: createContentDigest(JSON.stringify(aboutLeadership)),
-          },
-          parent: node.id,
-          blocktype: "AboutLeadership",
-          kicker: aboutLeadership.aboutLeadershipKicker,
-          heading: aboutLeadership.aboutLeadershipHeading,
-          subhead: aboutLeadership.aboutLeadershipSubhead,
-          content: [
-            aboutLeadership.profile1,
-            aboutLeadership.profile2,
-            aboutLeadership.profile3,
-            aboutLeadership.profile4,
-            aboutLeadership.profile5,
-            aboutLeadership.profile6,
-          ].map((profile) => profile.id),
-        })
-
-        actions.createNode({
-          id: aboutLogosID,
-          internal: {
-            type: "AboutLogoList",
-            contentDigest: createContentDigest(JSON.stringify(aboutLogoList)),
-          },
-          parent: node.id,
-          blocktype: "AboutLogoList",
-          heading: aboutLogoList.aboutLogoListHeading,
-          links: [
-            createLinkNode(aboutLogosID)(aboutLogoList.aboutLogoListLink),
-          ],
-          logos: [
-            aboutLogoList.logo1,
-            aboutLogoList.logo2,
-            aboutLogoList.logo3,
-            aboutLogoList.logo4,
-            aboutLogoList.logo5,
-            aboutLogoList.logo6,
-            aboutLogoList.logo7,
-            aboutLogoList.logo8,
-            aboutLogoList.logo9,
-            aboutLogoList.logo10,
-            aboutLogoList.logo11,
-            aboutLogoList.logo12,
-            aboutLogoList.logo13,
-            aboutLogoList.logo14,
-            aboutLogoList.logo15,
-          ].map((logo) => logo.id),
-        })
-
-        actions.createNode({
-          id: aboutBenefitsID,
-          internal: {
-            type: "HomepageBenefitList",
-            contentDigest: createContentDigest(JSON.stringify(benefitList)),
-          },
-          parent: node.id,
-          blocktype: "HomepageBenefitList",
-          heading: benefitList.benefitsHeading,
-          text: benefitList.benefitsText,
-          content: [
-            benefitList.benefit1,
-            benefitList.benefit2,
-            benefitList.benefit3,
-            benefitList.benefit4,
-            benefitList.benefit5,
-            benefitList.benefit6,
-          ].map((benefit) => benefit.id),
-        })
-
-        actions.createNode({
-          id: aboutCtaID,
-          internal: {
-            type: "HomepageCta",
-            contentDigest: createContentDigest(JSON.stringify(homepageCta)),
-          },
-          parent: node.id,
-          blocktype: "HomepageCta",
-          kicker: homepageCta.ctaKicker,
-          heading: homepageCta.ctaHeading,
-          text: homepageCta.ctaText,
-          links: [homepageCta.ctaLink, homepageCta.ctaSecondaryLink]
-            .filter(Boolean)
-            .map(createLinkNode(aboutCtaID)),
-          image: "",
-        })
-
-        actions.createNode({
-          ...node,
+          ...node.homepage,
           id: createNodeId(`${node.id} >>> AboutPage`),
           internal: {
             type: "AboutPage",
             contentDigest: node.internal.contentDigest,
           },
           parent: node.id,
-          blocktype: "AboutPage",
-          image: node.featuredImageId,
-          content: [
-            aboutHeroID,
-            aboutStatsID,
-            aboutLeadershipID,
-            aboutLogosID,
-            aboutBenefitsID,
-            aboutCtaID,
-          ],
+          title: node.title,
+          image: node.featuredImage?.node?.id,
+          content: node.homepage?.blocks?.map((block) => block.id),
         })
-
-        // delete the node because we're not using it in `src/pages/{Page.slug}.js`
-        actions.deleteNode(node, { name: "gatsby-source-wordpress" })
-      }
-      break
-    case "WpFeature":
-      if (node.feature.link) {
-        const linkID = createLinkNode(node.id)(node.feature.link, 0)
-        actions.createNodeField({
-          node,
-          name: "links",
-          value: [linkID],
-        })
-      }
-      break
-    case "WpProduct":
-      if (node.product.link) {
-        const linkID = createLinkNode(node.id)(node.product.link, 0)
-        actions.createNodeField({
-          node,
-          name: "links",
-          value: [linkID],
-        })
-      }
-      break
-    case "WpHeader":
-      const { header } = node
-      const headerLinks = [
-        header.link1,
-        header.link2,
-        header.link3,
-        header.link4,
-        header.link5,
-      ].map(createLinkNode(node.id))
-      const headerCta = createLinkNode(node.id)(header.cta, 9999)
-      actions.createNodeField({
-        node,
-        name: "links",
-        value: headerLinks,
-      })
-      actions.createNodeField({
-        node,
-        name: "cta",
-        value: headerCta,
-      })
-      break
-    case "WpFooter":
-      const { footer } = node
-      const footerLinks = [
-        footer.link1,
-        footer.link2,
-        footer.link3,
-        footer.link4,
-        footer.link5,
-      ].map(createLinkNode(node.id))
-      // TODO currently hard-coded to only these social networks
-      const socialLinks = [
-        { username: footer.twitter, service: "TWITTER" },
-        { username: footer.twitch, service: "TWITCH" },
-        { username: footer.instagram, service: "INSTAGRAM" },
-        { username: footer.github, service: "GITHUB" },
-        { username: footer.youtube, service: "YOUTUBE" },
-        { username: footer.facebook, service: "FACEBOOK" },
-      ].map((link, i) => {
-        const id = createNodeId(`${node.id} >>> SocialLink ${i}`)
+        break
+      default:
         actions.createNode({
-          ...link,
-          id,
+          ...node.page,
+          id: createNodeId(`${node.id} >>> Page ${node.slug}`),
           internal: {
-            type: "SocialLink",
-            contentDigest: createContentDigest(JSON.stringify(link)),
+            type: "Page",
+            contentDigest: node.internal.contentDigest,
           },
+          parent: node.id,
+          slug: node.slug,
+          title: node.title,
+          description: node.page?.description,
+          image: node.featuredImage?.node?.id,
+          html: node.content,
         })
-        return id
-      })
-      const metaLinks = [footer.termsLink, footer.privacyPolicyLink].map(
-        createLinkNode(node.id)
-      )
-      actions.createNodeField({
-        node,
-        name: "links",
-        value: footerLinks,
-      })
-      actions.createNodeField({
-        node,
-        name: "socialLinks",
-        value: socialLinks,
-      })
-      actions.createNodeField({
-        node,
-        name: "meta",
-        value: metaLinks,
-      })
-      break
+        break
+    }
   }
 }
