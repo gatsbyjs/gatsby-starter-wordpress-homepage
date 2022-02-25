@@ -185,6 +185,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
 
     type AboutHero implements Node & HomepageBlock {
       id: ID!
+      blocktype: String
       originalId: String
       heading: String
       text: String
