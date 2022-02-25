@@ -136,7 +136,7 @@ export function Kicker({ ...props }) {
 }
 
 export function Link({ to, href, ...props }) {
-  const url = href || to
+  const url = href || to || ""
   if (isAbsoluteURL(url)) {
     return (
       // eslint-disable-next-line jsx-a11y/anchor-has-content
