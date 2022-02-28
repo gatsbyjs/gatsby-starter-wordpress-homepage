@@ -37,7 +37,7 @@ const data = {
     {
       id: 2,
       navItemType: "Link",
-      href: "/about",
+      href: "#!",
       text: "About",
     },
     {

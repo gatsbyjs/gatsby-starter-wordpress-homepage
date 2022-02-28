@@ -402,6 +402,14 @@ exports.onCreateNode = ({
             ...testimonialList,
             content: content.testimonials,
           },
+          cta: {
+            id: createNodeId(`${node.id} >>> HompageCta`),
+            ...cta,
+            image: cta.image?.id,
+            links: [cta.link1, cta.link2]
+              .filter(Boolean)
+              .map(createLinkNode(node.id)),
+          },
         }
 
         actions.createNode({
@@ -468,6 +476,15 @@ exports.onCreateNode = ({
         })
 
         actions.createNode({
+          ...blocks.cta,
+          blocktype: "HomepageCta",
+          internal: {
+            type: "HomepageCta",
+            contentDigest: node.internal.contentDigest,
+          },
+        })
+
+        actions.createNode({
           ...node.homepage,
           id: createNodeId(`${node.id} >>> Homepage`),
           internal: {
@@ -486,6 +503,7 @@ exports.onCreateNode = ({
             blocks.benefitList.id,
             blocks.statList.id,
             blocks.testimonialList.id,
+            blocks.cta.id,
           ],
         })
 
