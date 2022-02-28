@@ -17,7 +17,6 @@ This starter requires the following plugins to be installed in your WordPress in
 - [WPGraphQL][]
 - [Advanced Custom Fields][]
 - [WPGraphQL for Advanced Custom Fields][]
-- [Custom Post Type UI][]
 
 Once these plugins are installed, you'll need the URL of the GraphQL endpoint for configuration.
 
@@ -25,7 +24,6 @@ Once these plugins are installed, you'll need the URL of the GraphQL endpoint fo
 [wpgraphql]: https://wordpress.org/plugins/wp-graphql/
 [advanced custom fields]: https://wordpress.org/plugins/advanced-custom-fields/
 [wpgraphql for advanced custom fields]: https://github.com/wp-graphql/wp-graphql-acf
-[custom post type ui]: https://wordpress.org/plugins/custom-post-type-ui/
 
 1. **Create a Gatsby site**
 
@@ -37,15 +35,10 @@ Once these plugins are installed, you'll need the URL of the GraphQL endpoint fo
 
 1. **Import content to your WordPress instance**
 
-   - In your WordPress Admin navigate to _CPT UI_ > _Tools_ and paste the contents of the `data/post-types.json` file into the _Import Post Types_ field and click the _Import_ button.
-   - In _CPT UI_ > _Tools_, go to the _Taxonomies_ tab and paste the contents of the `data/taxonomies.json` file into the _Import Taxonomies_ field and click the _Import_ button.
-
-   <!--
-   - Navigate to _Custom Fields_ > _Tools_ and upload the `data/acf-field-groups.json` file in the _Import Field Groups_ form and click _Import File_.
-     -->
-
-   - Next, go to _Tools_ > _Import_ and use the _WordPress_ import tool to upload the content from the `data/content.xml` file.
+   - In your WordPress Admin, navigate to _Custom Fields_ > _Tools_ and upload the `data/acf-field-groups.json` file in the _Import Field Groups_ form and click _Import File_.
+   - Under _Pages_, create a new page called "Homepage."
    - Ensure that the Homepage imported into WordPress is set to be your site's "Homepage" by going to _Settings_ > _Reading_ and setting the _Your homepage displays_ field to _A static page_ and select _Homepage_ from the dropdown.
+   - Navigate back to the Homepage, where you should see the custom field groups for the homepage and you can add your own content.
    - Finally, go to _GraphQL_ > _Settings_ and copy the endpoint for the GraphQL API (e.g. https://example.com/graphql) and create a `.env` file with `WPGRAPHQL_URL="<your-graphql-endpoint-url>"`.
 
 1. **Start developing**
@@ -63,6 +56,22 @@ Once these plugins are installed, you'll need the URL of the GraphQL endpoint fo
 ## Deploy your site
 
 Once your content is available in WordPress, deploy your site to [Gatsby Cloud](https://gatsbyjs.com/products/cloud):
+
+1. Push your local site to a new repo in either GitHub, GitLab, or Bitbucket
+1. Log into your [Gatsby Cloud Dashboard][] and click on **Add a site**
+1. Use the **Import from a Git repository** option to find your site
+1. Add the environment variables from your `.env.production` file to Gatsby Cloud during setup
+1. Click **Build site** and your site should start building
+
+For a more detailed walkthrough, see the tutorial on how to [build your site with Gatsby Cloud][tutorial].
+
+[gatsby cloud dashboard]: https://gatsbyjs.com/dashboard
+[tutorial]: https://www.gatsbyjs.com/docs/tutorial/part-1/#build-your-site-with-gatsby-cloud
+
+### Deploy without using the CLI
+
+Alternatively, you can deploy this starter directly to Gatsby Cloud.
+Note that you will need to set up your content in WordPress manually.
 
 [![Deploy to Gatsby](https://www.gatsbyjs.com/deploynow.png "Deploy to Gatsby")](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-wordpress-homepage)
 
