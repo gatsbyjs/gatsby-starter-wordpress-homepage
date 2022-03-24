@@ -29,6 +29,11 @@
     "sharp": "^0.29.3"
   },
   "private": true,
+  "devDependencies": {
+    "prettier": "2.5.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.1"
+  },
   "scripts": {
     "start": "gatsby develop",
     "develop": "gatsby develop",
