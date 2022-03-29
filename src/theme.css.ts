@@ -1,5 +1,8 @@
 import { createGlobalTheme } from "@vanilla-extract/css"
-import { colors } from "./colors.css.ts"
+import { colors } from "./colors.css"
+
+export type SpaceTokens = 0 | 1 | 2 | 3 | 4 | 5 | 6
+export type Space = Record<SpaceTokens, string>
 
 const space = {
   0: "0",
@@ -17,7 +20,7 @@ Object.assign(
   Object.entries(space).reduce(
     (a, [key, val]) => ({
       ...a,
-      [-1 * key]: `-${val}`,
+      [-1 * Number(key)]: `-${val}`,
     }),
     {}
   )
@@ -73,7 +76,9 @@ const sizes = {
   navIconSmall: "30px",
 }
 
-const radii = {
+export type Radii = "button" | "large" | "circle"
+
+const radii: Record<Radii, string> = {
   button: "10px",
   large: "24px",
   circle: "99999px",

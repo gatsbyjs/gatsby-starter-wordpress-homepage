@@ -8,6 +8,9 @@ Create a homepage using Gatsby and WordPress. This starter demonstrates how to u
 
 [View the Demo](https://gatsbywordpresshomepage.gatsbyjs.io/)
 
+**Note:**
+This version of the WordPress homepage starter is written in JavaScript. If you want to use WordPress but TypeScript is more your style, there is also a TypeScript version maintained on [GitHub](https://github.com/gatsbyjs/gatsby-starter-wordpress-homepage-ts).
+
 ## Quick start
 
 You will need a new or existing WordPress instance to use this starter.
@@ -29,7 +32,7 @@ Once these plugins are installed, you'll need the URL of the GraphQL endpoint fo
 
    Use the Gatsby CLI to get started locally:
 
-   ```sh name
+   ```sh repo
    npx gatsby new my-homepage https://github.com/gatsbyjs/gatsby-starter-wordpress-homepage
    ```
 
@@ -252,7 +255,7 @@ For this example, we'll create a new "Banner" component.
 
 1. Next, create the Banner component:
 
-   ```jsx
+   ```jsx fileExt
    // src/components/banner.js
    import * as React from "react"
    import { graphql } from "gatsby"
@@ -280,7 +283,7 @@ For this example, we'll create a new "Banner" component.
 
 1. Export the component from `src/components/sections.js`
 
-   ```js
+   ```js fileExt
    // src/components/sections.js
    export { default as HomepageHero } from "./hero"
    export { default as HomepageFeature } from "./feature"
@@ -298,7 +301,7 @@ For this example, we'll create a new "Banner" component.
 
 1. Add the GraphQL query fragment to the query in `src/pages/index.js`
 
-   ```js
+   ```js fileExt
    // in src/pages/index.js
    export const query = graphql`
      {

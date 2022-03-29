@@ -17,7 +17,11 @@ function Product(props) {
   return (
     <Box center>
       {props.image && (
-        <Icon alt={props.image.alt} image={props.image} size="large" />
+        <Icon
+          alt={props.image.alt}
+          image={props.image.gatsbyImageData}
+          size="large"
+        />
       )}
       <Subhead>{props.heading}</Subhead>
       <Text>{props.text}</Text>

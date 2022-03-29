@@ -1,8 +1,8 @@
-import * as React from "react"
 import { Link as GatsbyLink } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import isAbsoluteURL from "is-absolute-url"
-import * as styles from "./ui.css.ts"
+import * as React from "react"
+import * as styles from "./ui.css"
 
 export const cx = (...args) => args.filter(Boolean).join(" ")
 
@@ -27,21 +27,21 @@ export function Flex({
   responsive,
   marginY,
   alignItems,
-  cx: _cx,
+  cx: _cx = [],
   ...props
 }) {
   return (
     <Base
       cx={[
         styles.flex,
-        styles.flexVariants[variant],
+        variant && styles.flexVariants[variant],
         responsive && styles.flexVariants.responsive,
         wrap && styles.flexVariants.wrap,
         gutter && styles.gutter[gutter],
         gutter ? styles.flexGap[0] : styles.flexGap[gap],
         marginY && styles.marginY[marginY],
         alignItems && styles.flexVariants[alignItems],
-        _cx,
+        ..._cx,
       ]}
       {...props}
     />
@@ -56,28 +56,28 @@ export function Box({
   radius,
   center = false,
   order,
-  cx,
+  cx: _cx = [],
   ...props
 }) {
   return (
     <Base
       cx={[
         styles.widths[width],
-        styles.backgrounds[background],
-        styles.padding[padding],
-        styles.paddingY[paddingY],
-        styles.radii[radius],
+        background && styles.backgrounds[background],
+        padding && styles.padding[padding],
+        paddingY && styles.paddingY[paddingY],
+        radius && styles.radii[radius],
         center && styles.box.center,
         order && styles.order[order],
-        cx,
+        ..._cx,
       ]}
       {...props}
     />
   )
 }
 
-export function FlexList({ ...props }) {
-  return <Flex as="ul" cx={styles.list} {...props} />
+export function FlexList(props) {
+  return <Flex as="ul" cx={[styles.list]} {...props} />
 }
 
 export function List(props) {
@@ -92,10 +92,10 @@ export function Nudge({ left, right, top, bottom, ...props }) {
   return (
     <Base
       cx={[
-        styles.margin.left[-left],
-        styles.margin.right[-right],
-        styles.margin.top[-top],
-        styles.margin.bottom[-bottom],
+        left && styles.marginLeft[-left],
+        right && styles.marginRight[-right],
+        top && styles.marginTop[-top],
+        bottom && styles.marginBottom[-bottom],
       ]}
       {...props}
     />
@@ -106,7 +106,12 @@ export function Section(props) {
   return <Box as="section" className={styles.section} {...props} />
 }
 
-export function Text({ variant = "body", center, bold, ...props }) {
+export function Text({
+  variant = "body",
+  center = false,
+  bold = false,
+  ...props
+}) {
   return (
     <Base
       cx={[

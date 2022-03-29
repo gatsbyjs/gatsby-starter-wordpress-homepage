@@ -28,7 +28,6 @@
     "react-feather": "^2.0.9",
     "sharp": "^0.29.3"
   },
-  "private": true,
   "devDependencies": {
     "prettier": "2.5.1",
     "husky": "^7.0.4",

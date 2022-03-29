@@ -1,6 +1,6 @@
 import { style, styleVariants } from "@vanilla-extract/css"
 import { calc } from "@vanilla-extract/css-utils"
-import { theme } from "../theme.css.ts"
+import { theme } from "../theme.css"
 
 const breakpoints = ["40em", "52em", "64em"]
 
@@ -18,7 +18,9 @@ export const container = style({
   paddingRight: theme.space[4],
 })
 
-export const containers = styleVariants({
+export type Containers = "normal" | "wide" | "narrow" | "tight" | "fullbleed"
+
+export const containers: Record<Containers, string> = styleVariants({
   normal: [container],
   wide: [
     container,
@@ -64,7 +66,19 @@ export const flex = style({
   alignItems: "center",
 })
 
-export const flexVariants = styleVariants({
+export type FlexVariants =
+  | "wrap"
+  | "start"
+  | "baseline"
+  | "columnStart"
+  | "column"
+  | "end"
+  | "stretch"
+  | "spaceBetween"
+  | "center"
+  | "responsive"
+
+export const flexVariants: Record<FlexVariants, string> = styleVariants({
   wrap: {
     flexWrap: "wrap",
   },
@@ -109,7 +123,15 @@ export const flexVariants = styleVariants({
 
 export const flexGap = styleVariants(theme.space, (gap) => ({ gap }))
 
-export const widths = styleVariants(
+export type Widths =
+  | "full"
+  | "half"
+  | "quarter"
+  | "third"
+  | "twothirds"
+  | "fitContent"
+
+export const widths: Record<Widths, string> = styleVariants(
   {
     full: "100%",
     half: "50%",
@@ -145,15 +167,17 @@ export const marginY = styleVariants(theme.space, (margin) => ({
   marginTop: margin,
   marginBottom: margin,
 }))
-export const gutter = styleVariants(theme.space, (val) => ({
+
+export const gutter = styleVariants(theme.space, (val: string) => ({
   marginLeft: calc.multiply(val, -1),
   marginRight: calc.multiply(val, -1),
 }))
+
 export const radii = styleVariants(theme.radii, (borderRadius) => ({
   overflow: "hidden",
   borderRadius,
 }))
-export const order = styleVariants([0, 1, 2, 3], (order) => ({
+export const order = styleVariants({ 0: 0, 1: 1, 2: 2, 3: 3 }, (order) => ({
   "@media": {
     [media.small]: {
       order,
@@ -187,28 +211,32 @@ export const margin = styleVariants(
   },
   (margin) => ({ margin })
 )
-margin.left = styleVariants(
+
+export const marginLeft = styleVariants(
   {
     ...theme.space,
     auto: "auto",
   },
   (marginLeft) => ({ marginLeft })
 )
-margin.right = styleVariants(
+
+export const marginRight = styleVariants(
   {
     ...theme.space,
     auto: "auto",
   },
   (marginRight) => ({ marginRight })
 )
-margin.top = styleVariants(
+
+export const marginTop = styleVariants(
   {
     ...theme.space,
     auto: "auto",
   },
   (marginTop) => ({ marginTop })
 )
-margin.bottom = styleVariants(
+
+export const marginBottom = styleVariants(
   {
     ...theme.space,
     auto: "auto",
@@ -218,7 +246,24 @@ margin.bottom = styleVariants(
 
 export const margin0 = style({ margin: 0 })
 
-export const text = styleVariants({
+export type TextVariants =
+  | "body"
+  | "lead"
+  | "superHeading"
+  | "heading"
+  | "subhead"
+  | "subheadSmall"
+  | "kicker"
+  | "caps"
+  | "stat"
+  | "statLabel"
+  | "small"
+  | "medium"
+  | "mega"
+  | "center"
+  | "bold"
+
+export const text: Record<TextVariants, string> = styleVariants({
   body: [
     margin0,
     {
@@ -423,7 +468,9 @@ const button = style({
   borderRadius: theme.radii.button,
 })
 
-export const buttons = styleVariants({
+export type ButtonVariants = "primary" | "reversed" | "link" | "linkReversed"
+
+export const buttons: Record<ButtonVariants, string> = styleVariants({
   primary: [
     button,
     {
@@ -482,7 +529,9 @@ export const buttons = styleVariants({
   ],
 })
 
-export const backgrounds = styleVariants({
+export type Backgrounds = "primary" | "muted"
+
+export const backgrounds: Record<Backgrounds, string> = styleVariants({
   primary: {
     color: theme.colors.background,
     backgroundColor: theme.colors.primary,
@@ -509,7 +558,9 @@ export const avatar = style({
   borderRadius: theme.radii.circle,
 })
 
-export const logos = styleVariants({
+export type LogoSizes = "small" | "medium"
+
+export const logos: Record<LogoSizes, string> = styleVariants({
   small: {
     width: "85px",
     height: "20px",
@@ -519,7 +570,9 @@ export const logos = styleVariants({
   },
 })
 
-export const icons = styleVariants(
+export type IconSizes = "small" | "medium" | "large"
+
+export const icons: Record<IconSizes, string> = styleVariants(
   {
     small: "24px",
     medium: "32px",

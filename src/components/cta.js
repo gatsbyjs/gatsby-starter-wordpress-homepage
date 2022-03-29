@@ -25,7 +25,10 @@ export default function HomepageCta(props) {
         <ButtonList links={props.links} variant="center" reversed />
         {props.image && (
           <Nudge left={5} right={5} bottom={5}>
-            <GatsbyImage alt={props.image.alt} image={getImage(props.image)} />
+            <GatsbyImage
+              alt={props.image.alt}
+              image={getImage(props.image.gatsbyImageData)}
+            />
           </Nudge>
         )}
       </Section>

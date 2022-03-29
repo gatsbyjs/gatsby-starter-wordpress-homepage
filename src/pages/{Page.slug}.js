@@ -31,7 +31,7 @@ export const query = graphql`
       description
       image {
         id
-        gatsbyImageData
+        url
       }
       html
     }

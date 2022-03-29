@@ -66,7 +66,7 @@ export default function NavItemGroup({ name, navItems }) {
     <Flex
       data-id={`${name}-group-wrapper`}
       variant="columnStart"
-      gap="4"
+      gap={4}
       className={styles.navGroupWrapper}
     >
       <NavButtonLink
@@ -97,7 +97,7 @@ export default function NavItemGroup({ name, navItems }) {
                     {navItem.icon && (
                       <GatsbyImage
                         alt={navItem.icon.alt}
-                        image={getImage(navItem.icon)}
+                        image={getImage(navItem.icon.gatsbyImageData)}
                         className={styles.navIcon}
                       />
                     )}

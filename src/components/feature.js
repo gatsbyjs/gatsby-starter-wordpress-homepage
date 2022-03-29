@@ -21,7 +21,7 @@ export default function Feature(props) {
             {props.image && (
               <GatsbyImage
                 alt={props.image.alt}
-                image={getImage(props.image)}
+                image={getImage(props.image.gatsbyImageData)}
               />
             )}
           </Box>

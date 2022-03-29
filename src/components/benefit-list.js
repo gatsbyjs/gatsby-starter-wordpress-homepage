@@ -15,7 +15,11 @@ function Benefit(props) {
   return (
     <Box as="li" width="third" padding={4} paddingY={3}>
       {props.image && (
-        <Icon alt={props.image.alt} image={props.image} size="small" />
+        <Icon
+          alt={props.image.alt}
+          image={props.image.gatsbyImageData}
+          size="small"
+        />
       )}
       <Space size={2} />
       <Heading variant="subheadSmall">{props.heading}</Heading>

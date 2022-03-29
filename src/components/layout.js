@@ -2,9 +2,9 @@ import * as React from "react"
 import Header from "./header"
 import Footer from "./footer"
 import Head from "./head"
-import "../styles.css.ts"
+import "../styles.css"
 
-export default function Layout(props) {
+const Layout = (props) => {
   return (
     <>
       <Head {...props} />
@@ -14,3 +14,5 @@ export default function Layout(props) {
     </>
   )
 }
+
+export default Layout

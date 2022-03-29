@@ -17,7 +17,7 @@ import {
   desktopHeaderNavWrapper,
   mobileHeaderNavWrapper,
   mobileNavSVGColorWrapper,
-} from "./header.css.ts"
+} from "./header.css"
 import BrandLogo from "./brand-logo"
 
 const data = {
@@ -54,7 +54,7 @@ const data = {
 }
 
 export default function Header() {
-  const { navItems, cta } = data // .layout.header
+  const { navItems, cta } = data
   const [isOpen, setOpen] = React.useState(false)
 
   React.useEffect(() => {

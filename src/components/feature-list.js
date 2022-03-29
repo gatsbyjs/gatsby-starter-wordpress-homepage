@@ -15,7 +15,7 @@ export default function FeatureList(props) {
           {props.text && <Text>{props.text}</Text>}
         </Box>
         {props.content.map((feature, i) => (
-          <Feature key={feature.id} {...feature} flip={i % 2} />
+          <Feature key={feature.id} {...feature} flip={Boolean(i % 2)} />
         ))}
       </Box>
     </Container>

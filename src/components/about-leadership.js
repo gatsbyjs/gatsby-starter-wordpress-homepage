@@ -16,7 +16,10 @@ function AboutProfile(props) {
   return (
     <Box width="third" padding={4} center>
       {props.image && (
-        <GatsbyImage alt={props.image.alt} image={getImage(props.image)} />
+        <GatsbyImage
+          alt={props.image.alt}
+          image={getImage(props.image.gatsbyImageData)}
+        />
       )}
       <Space size={3} />
       <Box>
@@ -44,7 +47,7 @@ export default function AboutLeadership(props) {
           {props.heading && <Heading as="h1">{props.heading}</Heading>}
           {props.subhead && <Text>{props.subhead}</Text>}
         </Box>
-        <FlexList gutter={false} gap={0} variant="center" alignItems="start">
+        <FlexList gap={0} variant="center" alignItems="start">
           {props.content.map((profile) => (
             <AboutProfile key={profile.id} {...profile} />
           ))}

@@ -1,5 +1,5 @@
 import { style, styleVariants } from "@vanilla-extract/css"
-import { theme } from "../theme.css.ts"
+import { theme } from "../theme.css"
 import { media } from "./ui.css"
 import { mobileNavLink } from "./header.css"
 
