@@ -5,7 +5,10 @@ exports.createSchemaCustomization = async ({ actions }) => {
       return {
         async resolve(source, args, context, info) {
           const imageType = info.schema.getType("ImageSharp")
-          const file = context.nodeModel.getNodeById(source.localFile)
+          const file = context.nodeModel.getNodeById({
+            id: source.localFile,
+          })
+          if (!file) return null
           const image = context.nodeModel.getNodeById({
             id: file.children[0],
           })
@@ -248,7 +251,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
 
   // WordPress types
   actions.createTypes(/* GraphQL */ `
-    type WpMediaItem implements Node & HomepageImage {
+    type WpMediaItem implements Node & RemoteFile & HomepageImage {
       id: ID!
       alt: String @proxy(from: "altText")
       altText: String
