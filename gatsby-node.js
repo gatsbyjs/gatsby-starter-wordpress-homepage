@@ -1,8 +1,12 @@
+const { getGatsbyImageResolver } = require("gatsby-plugin-image/graphql-utils")
+
 exports.createSchemaCustomization = async ({ actions }) => {
   actions.createFieldExtension({
     name: "wpImagePassthroughResolver",
     extend(options) {
+      const { args } = getGatsbyImageResolver()
       return {
+        args,
         async resolve(source, args, context, info) {
           const imageType = info.schema.getType("ImageSharp")
           const file = context.nodeModel.getNodeById({
@@ -36,7 +40,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
     interface HomepageImage implements Node {
       id: ID!
       alt: String
-      gatsbyImageData: JSON
+      gatsbyImageData: JSON @wpImagePassthroughResolver
       image: HomepageImage
       localFile: File
       url: String
