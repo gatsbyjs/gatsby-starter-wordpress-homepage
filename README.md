@@ -156,7 +156,7 @@ Most of the styles for these components are handled with shared UI components in
 
 ### Create custom section components
 
-To create a new type of section in your homepage, you'll want to create a new section component. Using the existing components as an example.
+To create a new type of section in your homepage, you'll want to create a new section component, using the existing components as an example.
 For this example, we'll create a new "Banner" component.
 
 1. First, update your custom fields in WordPress to support the new component
