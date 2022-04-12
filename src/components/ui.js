@@ -242,3 +242,7 @@ export function InteractiveIcon(props) {
 export function VisuallyHidden(props) {
   return <Base as="span" cx={[styles.visuallyHidden]} {...props} />
 }
+
+export function BlockLink(props) {
+  return <Link className={styles.blockLink} {...props} />
+}

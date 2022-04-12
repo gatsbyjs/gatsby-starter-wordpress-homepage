@@ -7386,6 +7386,25 @@ gatsby-telemetry@^3.11.1:
     lodash "^4.17.21"
     node-fetch "^2.6.7"
 
+gatsby-theme-abstract-blog@1.0.0-1:
+  version "1.0.0-1"
+  resolved "https://registry.yarnpkg.com/gatsby-theme-abstract-blog/-/gatsby-theme-abstract-blog-1.0.0-1.tgz#f014f54c322dae1cf678888bd8e88311254a6e54"
+  integrity sha512-BjiXN5mf4lxOGlDwweii/AXaG1QbJBWJfGrFSMj3Pb57deDQvZM603R2ODyQjYzIa+jcVvm5SJLRJvr0JvBe1w==
+
+gatsby-theme-contentful-blog@1.0.0-1:
+  version "1.0.0-1"
+  resolved "https://registry.yarnpkg.com/gatsby-theme-contentful-blog/-/gatsby-theme-contentful-blog-1.0.0-1.tgz#38a2eae3506efa5141b7daa5373c9c7cc779eeed"
+  integrity sha512-Vht3Y8seJXcEyW7OpqSt13qCZHGo30sEHevhLID2NBcaoUmvw9BktQIFKIObw6zJCVHau38OAlVWcX/2RIp1vA==
+  dependencies:
+    "@contentful/rich-text-html-renderer" "^15.11.1"
+    gatsby-plugin-image "^2.6.0"
+    gatsby-plugin-sharp "^4.6.0"
+    gatsby-source-contentful "^7.4.0"
+    gatsby-theme-abstract-blog "1.0.0-1"
+    gatsby-transformer-remark "^5.6.0"
+    gatsby-transformer-sharp "^4.6.0"
+    sharp "^0.29.3"
+
 gatsby-transformer-remark@^5.6.0:
   version "5.10.2"
   resolved "https://registry.yarnpkg.com/gatsby-transformer-remark/-/gatsby-transformer-remark-5.10.2.tgz#a406f09e7d1ef55553a97d0e289aebfcd93caff5"

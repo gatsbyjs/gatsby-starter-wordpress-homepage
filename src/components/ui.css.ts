@@ -455,6 +455,12 @@ export const ctaLink = style({
   },
 })
 
+export const blockLink = style({
+  display: "block",
+  color: "inherit",
+  textDecoration: "none",
+})
+
 const button = style({
   display: "inline-flex",
   textDecoration: "none",
