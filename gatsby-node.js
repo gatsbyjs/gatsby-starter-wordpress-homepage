@@ -10,7 +10,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
         async resolve(source, args, context, info) {
           const imageType = info.schema.getType("ImageSharp")
           const file = context.nodeModel.getNodeById({
-            id: source.localFile,
+            id: source.localFile.id,
           })
           if (!file) return null
           const image = context.nodeModel.getNodeById({
