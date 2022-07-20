@@ -74,6 +74,7 @@ For a more detailed walkthrough, see the tutorial on how to [build your site wit
 ### Deploy without using the CLI
 
 Alternatively, you can deploy this starter directly to Gatsby Cloud.
+
 Note that you will need to set up your content in WordPress manually.
 
 [![Deploy to Gatsby](https://www.gatsbyjs.com/deploynow.png "Deploy to Gatsby")](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-wordpress-homepage)
