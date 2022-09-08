@@ -10,7 +10,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
         async resolve(source, args, context, info) {
           const imageType = info.schema.getType("ImageSharp")
           const file = context.nodeModel.getNodeById({
-            id: source.localFile.id,
+            id: source.localFile?.id,
           })
           if (!file) return null
           const image = context.nodeModel.getNodeById({
@@ -40,7 +40,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
     interface HomepageImage implements Node {
       id: ID!
       alt: String
-      gatsbyImageData: JSON @wpImagePassthroughResolver
+      gatsbyImageData: GatsbyImageData @wpImagePassthroughResolver
       image: HomepageImage
       localFile: File
       url: String
@@ -259,7 +259,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
       id: ID!
       alt: String @proxy(from: "altText")
       altText: String
-      gatsbyImageData: JSON @wpImagePassthroughResolver
+      gatsbyImageData: GatsbyImageData @wpImagePassthroughResolver
       image: HomepageImage @wpRecursiveImage
       localFile: File
       url: String @proxy(from: "mediaItemUrl")
