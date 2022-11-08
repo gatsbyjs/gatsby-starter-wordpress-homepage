@@ -1,13 +1,8 @@
 import * as React from "react"
-import { Helmet } from "react-helmet"
 
 export default function Head({ title, description, image }) {
   return (
-    <Helmet
-      htmlAttributes={{
-        lang: "en-us",
-      }}
-    >
+    <>
       <meta charSet="utf-8" />
       <title>{title}</title>
       {description && (
@@ -23,6 +18,6 @@ export default function Head({ title, description, image }) {
       <meta name="twitter:title" content={title} />
       {description && <meta name="twitter:description" content={description} />}
       {image && <meta name="twitter:image" content={image.url} />}
-    </Helmet>
+    </>
   )
 }

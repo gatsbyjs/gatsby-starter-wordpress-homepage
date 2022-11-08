@@ -21,7 +21,6 @@ module.exports = {
     "gatsby-plugin-sharp",
     "gatsby-plugin-image",
     "gatsby-transformer-sharp",
-    "gatsby-plugin-react-helmet",
     "gatsby-plugin-vanilla-extract",
     {
       resolve: "gatsby-plugin-manifest",

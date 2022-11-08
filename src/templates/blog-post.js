@@ -12,10 +12,11 @@ import {
 } from "../components/ui"
 import { avatar as avatarStyle } from "../components/ui.css"
 import * as styles from "./blog-post.css"
+import SEOHead from "../components/head"
 
 export default function BlogPost(props) {
   return (
-    <Layout {...props} description={props.excerpt}>
+    <Layout>
       <Container>
         <Box paddingY={5}>
           <Heading as="h1" center>
@@ -62,4 +63,7 @@ export default function BlogPost(props) {
       </Container>
     </Layout>
   )
+}
+export const Head = (props) => {
+  return <SEOHead {...props} description={props.excerpt} />
 }

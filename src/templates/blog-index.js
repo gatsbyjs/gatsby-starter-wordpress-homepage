@@ -12,6 +12,7 @@ import {
   Kicker,
   Text,
 } from "../components/ui"
+import SEOHead from "../components/head"
 
 function PostCard({ slug, image, title, excerpt, author, category, ...props }) {
   return (
@@ -58,7 +59,7 @@ export default function BlogIndex({ posts }) {
   const regularPosts = posts.filter((p) => p.category !== "Featured")
 
   return (
-    <Layout title="Blog">
+    <Layout>
       <Container>
         <Box paddingY={4}>
           <Heading as="h1">Blog</Heading>
@@ -83,4 +84,7 @@ export default function BlogIndex({ posts }) {
       </Container>
     </Layout>
   )
+}
+export const Head = () => {
+  return <SEOHead title="Blog" />
 }
